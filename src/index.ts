@@ -1,5 +1,5 @@
 import os from 'os';
-import { printError, renderer } from './services/log.services';
+import { printError, renderer } from './helpers/log.helper';
 import commands from './commands.json'; 
 
 
