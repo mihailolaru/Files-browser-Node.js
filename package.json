@@ -3,9 +3,21 @@
   "version": "1.0.0",
   "description": "File system navigation cli app",
   "main": "index.js",
+  "type": "module",
   "scripts": {
+    "run": "",
+    "build": "tsc",
+    "lint": "eslint . --ext .js,.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Mihail OLARU",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^17.0.35",
+    "typescript": "^4.6.4"
+  },
+  "dependencies": {
+    "boxen": "^6.2.1",
+    "chalk": "^5.0.1"
+  }
 }

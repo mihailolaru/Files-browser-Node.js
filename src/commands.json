@@ -1,0 +1,10 @@
+{
+	"wind32":{
+		"listFiles": "dir",
+		"deleteFile":"rm"
+	},
+	"linux":{
+		"listFiles": "rm",
+		"deleteFile":"rm"
+	}
+}
