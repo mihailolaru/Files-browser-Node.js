@@ -1,2 +1,0 @@
-/** Executing terminal commands. */
-
