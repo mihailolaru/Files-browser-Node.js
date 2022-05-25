@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "File system navigation cli app",
   "main": "index.js",
-  "type": "commonjs",
+  "type": "module",
   "bin": {
     "commander": "./dist/index.js"
   },
