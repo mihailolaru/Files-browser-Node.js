@@ -1,6 +1,6 @@
 import figlet from 'figlet';
 
-export const title = (title: string) => {
+export const appTitle = (title: string) => {
 	figlet.text(
 		title,
 		{
