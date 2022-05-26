@@ -1,6 +1,6 @@
 import os from 'os';
 import { appTitle } from './handlers/title.handler.js';
-//import { inputListenerProcess } from './processes/keyListener.process.js';
+import { inputListenerProcess } from './processes/keyListener.process.js';
 import { printInfo, tableRenderer } from './handlers/log.handler.js';
 import { inputRequest } from './handlers/input.handler.js';
 
@@ -13,8 +13,8 @@ const initCli = () => {
 		appTitle('File Manager');
 		tableRenderer('listFiles');
 		printInfo();
-		inputRequest();
-		//inputListenerProcess();
+		//inputRequest();
+		inputListenerProcess();
 	} else {
 		appTitle('ERROR. The OS is not supported');
 		return;
