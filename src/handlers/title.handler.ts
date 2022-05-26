@@ -1,5 +1,5 @@
 import figlet from 'figlet';
-import { printInfo, tableRenderer } from '../handlers/log.handler.js';
+import { tableRenderer } from '../handlers/log.handler.js';
 import { inputRequest } from '../handlers/input.handler.js';
 import boxen from 'boxen';
 import chalk from 'chalk';
@@ -31,7 +31,7 @@ export const appTitle = (title: string) => {
 				}),
 			);
 			//printInfo();
-			tableRenderer('listFiles');
+			tableRenderer();
 			inputRequest();
 		},
 	);

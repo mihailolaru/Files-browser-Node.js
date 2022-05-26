@@ -8,8 +8,18 @@ export const inputRequest = () => {
         message: 'Command:'
       },
     ])
-    .then(answer => 
+    .then(answer => {
       //console.log(answer.input)
-      tableRenderer(answer.input.trim);
+      const a = answer.input.trim;
+
+      switch(a){
+        case a==='o':
+          tableRenderer('openInEditor');
+          break;
+        case a === 'd':
+          tableRenderer('openInEditor');
+          break;
+
+    }
     );
 }

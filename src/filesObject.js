@@ -1,1 +1,1 @@
-export let filesObject = {};
+export let filesObject = [];
