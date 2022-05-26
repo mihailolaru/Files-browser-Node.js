@@ -5,7 +5,8 @@ import { tableRenderer } from './handlers/log.handler.js';
 
 const initCli = () => {
 	if (os.platform() === 'win32' || os.platform() === 'linux') {
-		tableRenderer('listFiles');			
+		appTitle('TITLE')
+		//tableRenderer('listFiles');			
 		inputListenerProcess();
 	} else {
 		appTitle('ERROR. The OS is not supported');

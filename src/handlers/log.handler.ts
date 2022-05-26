@@ -7,7 +7,6 @@ import { appTitle } from '../handlers/title.handler.js';
 import { COMMANDS } from '../commands.js';
 import { exec } from 'child_process';
 
-
 export const printError = (error: string) => {
 	console.log(chalk.bgRed(' error '), error);
 };
@@ -27,7 +26,6 @@ export const printInfo = () => {
 };
 
 export const tableRenderer = (key: string, fileName?: string) => {
-		
 	let commands = os.platform() === 'win32' ? COMMANDS.wind32 : COMMANDS.linux;
 	//console.log(boxen('Test box', { padding: 1 }));
 
@@ -35,11 +33,12 @@ export const tableRenderer = (key: string, fileName?: string) => {
 		if (process.stdout.columns == 10) process.stdout.write('+');
 		process.stdout.write('-');
 	}
-	
+
 	//TODO put the "/" in front of the fileName
 	//Include here the command from the passed args.
-	appTitle('FileManager');
+
 	exec(`${commands?.[key]}${fileName || ''}`, async (error, stdout, stderr) => {
+		//appTitle('FileManager');
 		if (error) {
 			console.log(`error: ${error.message}`);
 			return;
@@ -48,7 +47,7 @@ export const tableRenderer = (key: string, fileName?: string) => {
 			console.log(`stderr: ${stderr}`);
 			return;
 		}
-		
-		stdout.split('\r\n').forEach((e) => console.log(`%c ${e}`, '-color: blue;'));
+
+		stdout.split('\r\n').forEach((e) => console.log(e));
 	});
 };
