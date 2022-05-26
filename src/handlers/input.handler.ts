@@ -1,5 +1,5 @@
 import inquirer from 'inquirer';
-import { renderer } from '../handlers/log.handler.js';
+import { tableRenderer } from '../handlers/log.handler.js';
 
 export const inputRequest = () => { 
 inquirer
@@ -10,6 +10,6 @@ inquirer
     },
   ])
   .then(answer => {
-	  renderer(answer.input);   
+	  tableRenderer(answer.input);   
   });
 }

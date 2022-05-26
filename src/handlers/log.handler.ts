@@ -3,7 +3,7 @@
 import chalk from 'chalk';
 import os from 'os';
 import { COMMANDS } from '../commands.js';
-import boxen from 'boxen';
+//import boxen from 'boxen';
 import { exec } from 'child_process';
 
 export const printError = (error: string) => {
@@ -17,7 +17,7 @@ export const printSuccess = (message: string) => {
 //dedent is used to remove extra indentation.
 export const printInfo = () => {
 	console.log(
-		`${chalk.bgCyan('Available key command')}
+		`${chalk.bgCyan('Available key commands:')}
 		Use the following keys for:
 		q - quit
 		d - delete
@@ -26,7 +26,7 @@ export const printInfo = () => {
 	);
 };
 
-export const renderer = (key: string) => {
+export const tableRenderer = (key: string) => {
 	let commands = os.platform() === 'win32'? COMMANDS.wind32 : COMMANDS.linux;	
 	//console.log(boxen('Test box', { padding: 1 }));
 

@@ -13,10 +13,10 @@
   },
   "author": "Mihail OLARU",
   "license": "MIT",
-  "repository":{
-    "type":"git",
-    "url":"git+https://github.com/mihailolaru/clitestproject.git"
- },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mihailolaru/clitestproject.git"
+  },
   "devDependencies": {
     "@types/node": "^17.0.35",
     "@typescript-eslint/eslint-plugin": "^5.26.0",
