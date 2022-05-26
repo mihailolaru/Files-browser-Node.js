@@ -1,5 +1,9 @@
 import figlet from 'figlet';
 import { printInfo, tableRenderer } from '../handlers/log.handler.js';
+import { inputRequest } from '../handlers/input.handler.js';
+import boxen from 'boxen';
+import chalk from 'chalk';
+import dedent from 'dedent-js';
 
 export const appTitle = (title: string) => {
 	figlet.text(
@@ -17,8 +21,18 @@ export const appTitle = (title: string) => {
 				return;
 			}
 			console.log(data);
-			printInfo();
+			console.log(
+				boxen(dedent`Arrows keys - to navigate \n o - open \n d - delete \n q - quit`, {
+					title: chalk.bgCyan('Available key commands:'),
+					titleAlignment: 'center',
+					padding: 1,
+					margin: 1,
+					borderStyle: 'double',
+				}),
+			);
+			//printInfo();
 			tableRenderer('listFiles');
+			inputRequest();
 		},
 	);
 };
