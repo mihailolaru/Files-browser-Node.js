@@ -1,4 +1,5 @@
 import figlet from 'figlet';
+import { printInfo } from '../handlers/log.handler.js';
 
 export const appTitle = (title: string) => {
 	figlet.text(
@@ -15,7 +16,8 @@ export const appTitle = (title: string) => {
 				console.dir(err);
 				return;
 			}
-			console.log(data);
+			console.log(data);	
+			printInfo();	
 		},
 	);
 };
