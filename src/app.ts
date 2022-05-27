@@ -1,16 +1,31 @@
 import os from 'os';
-import { appTitle } from './handlers/title.handler.js';
-//import { inputListenerProcess } from './processes/keyListener.process.js';
-//import { tableRenderer } from './handlers/log.handler.js';
+import { tableRender } from './handlers/tableRender.handler.js';
+import figlet from 'figlet';
+import { inputListenerProcess } from './processes/keyListener.process.js';
 
 const initCli = () => {
 	if (os.platform() === 'win32' || os.platform() === 'linux') {
-		appTitle('File Manager')
-		//tableRenderer('listFiles');			
-		//inputListenerProcess();
+		tableRender();
+		inputListenerProcess();
 	} else {
-		appTitle('ERROR. The OS is not supported');
-		return;
+		figlet.text(
+			'ERROR. The OS is not supported',
+			{
+				horizontalLayout: 'default',
+				verticalLayout: 'default',
+				width: 80,
+				whitespaceBreak: true,
+			},
+			function (err, title) {
+				if (err) {
+					console.log('Something went wrong...');
+					console.dir(err);
+					return;
+				}
+				console.log(title);
+				return;
+			},
+		);
 	}
 };
 
