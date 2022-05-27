@@ -1,14 +1,20 @@
+// Table rendering logic
+
 import figlet from 'figlet';
-import { inputRequest } from './input.handler.js';
-import { filesObject } from '../filesObject.js';
-import { commandExec } from '../processes/commExec.process.js';
+// @ts-ignore
+import { filesObject } from '../resources.ts';
+// @ts-ignore
+import { commandExec } from '../processes/commExec.process.ts';
+
 // Style the console log
 import boxen from 'boxen';
 import chalk from 'chalk';
 import dedent from 'dedent-js';
 
-export const tableRender = () => {
-	commandExec('clearCMD');
+export const tableRender = async () => { 
+	await commandExec('clearCMD');
+	await commandExec('getDirectories');
+	await commandExec('clearCMD');
 	
 	figlet.text(
 		'File Manager',
@@ -35,10 +41,13 @@ export const tableRender = () => {
 					margin: 1,
 					borderStyle: 'double',
 				}),
-			);
+			);			
 
 			//List the files list. If any in the filesObject.
 			if (filesObject.length > 0) {
+				//Check if no elements are selected in the array, set as selected the first element.
+				if ( filesObject.filter(element=>element.selected===true).length>0) filesObject[0].selected=true;
+				
 				filesObject.forEach((item) => {
 					if (item?.selected === true) console.log(chalk.bgGreen(item));
 					if (item?.type === 'dir') console.log(chalk.red(item?.name));
@@ -48,9 +57,3 @@ export const tableRender = () => {
 		},
 	);
 };
-
-// Consider using this for table rendering.
-//for (let i = 0; i <= process.stdout.columns - 1; i++) {
-// 	if (process.stdout.columns == 10) process.stdout.write('+');
-// 	process.stdout.write('-');
-// }

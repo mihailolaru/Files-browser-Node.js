@@ -1,6 +1,10 @@
-/** Key press listener process */
-import { commandExec } from '../processes/commExec.process.js';
-import { filesObject } from '../filesObject.js';
+// Key press listener process
+// @ts-ignore
+import { commandExec } from '../processes/commExec.process.ts';
+// @ts-ignore
+import { filesObject } from '../resources.ts';
+// @ts-ignore
+import { tableRender } from "../handlers/tableRender.handler.ts";
 
 export const inputListenerProcess = () => {	
 	//Triggering actions without Enter key
@@ -9,23 +13,39 @@ export const inputListenerProcess = () => {
 	process.stdin.resume();
 	process.stdin.setEncoding('utf8');
 
-	process.stdin.on('data', (key) => {
-		if (key.toString() === '\u0071') {
-			console.log(key);
+	process.stdin.on('data', ( key ) => {
+		if ( key.toString() === '\u0071' ) {
+			// Quit			
 			process.exit();
-		} else if (key.toString() === '\u001B\u005B\u0041') {
-			process.stdout.write('up');				
+		} else if ( key.toString() === '\u001B\u005B\u0041' ) {
+			// up			
+			filesObject.forEach((element, index)=>{
+				if(element.selected===true&&index<filesObject.length){
+					element.selected===false;
+					filesObject[index-1].selected===true;
+				}
+			}); 	
 		} else if (key.toString() == '\u001B\u005B\u0042') {
-			process.stdout.write('down'); 
+			// Down		
+			filesObject.forEach( ( element, index )=>{
+				if( element.selected===true && index>filesObject.length ){
+					element.selected===false;
+					filesObject[index+1].selected===true;
+				}
+			}); 
 		} else if (key.toString() == '\u006F') {
-			process.stdout.write('open'); 
-		}	else if (key.toString() == '\u0064') {
-			process.stdout.write('delete'); 
+			// Open			
+			const file = filesObject.find(element => element.selected > true );
+			if(file.type==='file')commandExec('openInEditor', file.name);
+			tableRender();
+		}	else if ( key.toString() == '\u0064' ) {
+			// Delete		
+			const file = filesObject.find( element => element.selected > true );
+			commandExec( file.type==='dir'? 'deleteDirectory': 'deleteFile', file.name );
 		} else {
-			console.log(key);
+			console.log( key );
 		}
 	});
-
 }	
 
 	

@@ -1,20 +1,23 @@
-// Command execution process.
-import { exec } from 'child_process';
-import { filesObject } from '../filesObject.js';
-import { COMMANDS } from '../commands.js';
+// Commands execution process
 
-export const commandExec = (key?: string, filename?: string) => {
+import { exec } from 'child_process';
+// @ts-ignore
+import { filesObject } from '../resources.ts';
+// @ts-ignore
+import { COMMANDS } from '../resources.ts';
+
+export const commandExec = (key?: string, filename?: string): Promise<boolean> => {
 	if (key) {
-		exec(`${COMMANDS[key]}${filename||""}`, async (error, stdout, stderr) => {
-			if (error) {
+		exec( `${COMMANDS[key]}${filename||""}`, async ( error, stdout, stderr ) => {
+			if ( error ) {
 				console.log(`error: ${error.message}`);
-				return;
+				return false;
 			}
-			if (stderr) {
+			if ( stderr ) {
 				console.log(`stderr: ${stderr}`);
-				return;
+				return false;
 			}
-			if (key === 'getDirectories' || key === 'getFiles') {
+			if ( key === 'getDirectories' || key === 'getFiles' ) {
 				stdout.split('\r\n').forEach(e =>
 					filesObject.push({
 						name: e,
@@ -22,7 +25,9 @@ export const commandExec = (key?: string, filename?: string) => {
 						selected: false,
 					}),
 				);
+				return true;
 			}
 		});
 	}
+	return;
 };
