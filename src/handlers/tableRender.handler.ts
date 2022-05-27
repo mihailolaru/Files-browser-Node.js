@@ -1,9 +1,7 @@
 // Table rendering logic
 
 import figlet from 'figlet';
-// @ts-ignore
 import { filesObject } from '../resources.js';
-// @ts-ignore
 import { commandExec } from '../processes/commExec.process.js';
 
 // Style the console log
@@ -11,10 +9,10 @@ import boxen from 'boxen';
 import chalk from 'chalk';
 import dedent from 'dedent-js';
 
-export const tableRender = async () => {
-	await commandExec('clearCMD');
-	await commandExec('getDirectories');
-	await commandExec('clearCMD');
+export const tableRender = () => {
+	commandExec('clearCMD');
+	commandExec('getDirectories');
+	commandExec('getFiles');
 
 	figlet.text(
 		'File Manager',
@@ -44,16 +42,18 @@ export const tableRender = async () => {
 			);
 
 			//List the files list. If any in the filesObject.
-			if (filesObject.length > 0) {
+			if (filesObject.length > 0) {				
 				//Check if no elements are selected in the array, set as selected the first element.
-				if (filesObject.filter((element) => element.selected === true).length > 0)
+				if (filesObject.filter((element) => element?.selected === true)?.length === 0)
 					filesObject[0].selected = true;
 
-				filesObject.forEach((item) => {
-					if (item?.selected === true) console.log(chalk.bgGreen(item));
-					if (item?.type === 'dir') console.log(chalk.red(item?.name));
-					console.log(chalk.blue(item?.name));
-				});
+				for( let i = 0; i<filesObject.length-1; i++ ){		
+					let selected = filesObject[i]?.selected;	
+
+					if (filesObject[i]?.type === 'dir') console.log(selected ? chalk.bgGreen(chalk.red(filesObject?.[i]?.name)) : chalk.red(filesObject[i].name));
+
+					if (filesObject[i]?.type === 'file') console.log(selected ? chalk.bgGreen(chalk.blue(filesObject?.[i]?.name)) : chalk.blue(filesObject?.[i]?.name));			
+				}
 			}
 		},
 	);

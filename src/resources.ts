@@ -2,6 +2,7 @@ import os from 'os';
 
 const commandsList = {
 	wind32: {
+		cd: 'cd ',
 		currentDirePath: 'cd',	
 		deleteFile: 'rm ',
 		deleteDirectory: 'del -y ',
@@ -17,6 +18,7 @@ const commandsList = {
 		getFilesStatic: 'dir /a-df > %LOCALAPPDATA%\\cliTestFiles\\files.txt',
 	},
 	linux: {
+		cd: 'cd ',
 		currentDirePath: 'pwd',		
 		deleteFile: 'rm ',
 		deleteDirectory: 'rm -r ',

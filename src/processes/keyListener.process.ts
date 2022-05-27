@@ -1,12 +1,11 @@
 // Key press listener process
-// @ts-ignore
+
 import { commandExec } from '../processes/commExec.process.js';
-// @ts-ignore
 import { filesObject } from '../resources.js';
-// @ts-ignore
 import { tableRender } from "../handlers/tableRender.handler.js";
 
 export const inputListenerProcess = () => {	
+	const file = filesObject.find(element => element?.selected === true );
 	//Triggering actions without Enter key
 	if (process.stdin.isTTY) process.stdin.setRawMode(true);
 	// Continues process after key press
@@ -18,36 +17,40 @@ export const inputListenerProcess = () => {
 			// Quit			
 			process.exit();
 		} else if ( key.toString() === '\u001B\u005B\u0041' ) {
-			// up			
-			filesObject.forEach((element, index)=>{
-				if(element.selected===true&&index<filesObject.length){
-					element.selected===false;
-					filesObject[index-1].selected===true;
-				}
-			}); 	
-		} else if (key.toString() == '\u001B\u005B\u0042') {
-			// Down		
-			filesObject.forEach( ( element, index )=>{
-				if( element.selected===true && index>filesObject.length ){
-					element.selected===false;
-					filesObject[index+1].selected===true;
-				}
-			}); 
-		} else if (key.toString() == '\u006F') {
+			// up
+			for( let i = 0; i<filesObject.length; i++ ){
+				if( filesObject[i].selected === true && i!==0 ) {
+					filesObject[i].selected = false;
+					filesObject[i-1].selected =  true;	
+					//console.log( 'filesObject', filesObject );			
+				}	
+			}
+						
+		} else if ( key.toString() == '\u001B\u005B\u0042' ) {
+			// Down	
+			for( let i = 0; i<filesObject.length; i++ ){
+				if( filesObject[i].selected === true && i>filesObject.length-1 ){
+					filesObject[i].selected = false;
+					filesObject[i+1].selected = true;	
+					//console.log( 'filesObject', filesObject );				
+				}	
+			}	
+						
+		} else if ( key.toString() == '\u006F' ) {
 			// Open			
-			const file = filesObject.find(element => element.selected > true );
-			if(file.type==='file')commandExec('openInEditor', file.name);
+		
+			if(file?.type==='file')return commandExec('openInEditor', file?.name);
+			commandExec('cd', file?.name);
 			tableRender();
 		}	else if ( key.toString() == '\u0064' ) {
-			// Delete		
-			const file = filesObject.find( element => element.selected > true );
-			commandExec( file.type==='dir'? 'deleteDirectory': 'deleteFile', file.name );
+			// Delete					
+			commandExec( file?.type==='dir'? 'deleteDirectory': 'deleteFile', file?.name );
+			return tableRender();
 		} else {
-			console.log( key );
+			return console.log( key );
 		}
 	});
 }	
-
 	
 // '\u001B\u005B\u0041' - 'up'     
 // '\u001B\u005B\u0043' - 'right' 
