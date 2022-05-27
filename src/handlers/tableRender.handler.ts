@@ -2,9 +2,9 @@
 
 import figlet from 'figlet';
 // @ts-ignore
-import { filesObject } from '../resources.ts';
+import { filesObject } from '../resources.js';
 // @ts-ignore
-import { commandExec } from '../processes/commExec.process.ts';
+import { commandExec } from '../processes/commExec.process.js';
 
 // Style the console log
 import boxen from 'boxen';

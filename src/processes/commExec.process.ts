@@ -2,9 +2,7 @@
 
 import { exec } from 'child_process';
 // @ts-ignore
-import { filesObject } from '../resources.ts';
-// @ts-ignore
-import { COMMANDS } from '../resources.ts';
+import { filesObject, COMMANDS } from '../resources.js';
 
 export const commandExec = (key?: string, filename?: string): Promise<boolean> => {
 	if (key) {

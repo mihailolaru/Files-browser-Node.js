@@ -1,10 +1,10 @@
 // Key press listener process
 // @ts-ignore
-import { commandExec } from '../processes/commExec.process.ts';
+import { commandExec } from '../processes/commExec.process.js';
 // @ts-ignore
-import { filesObject } from '../resources.ts';
+import { filesObject } from '../resources.js';
 // @ts-ignore
-import { tableRender } from "../handlers/tableRender.handler.ts";
+import { tableRender } from "../handlers/tableRender.handler.js";
 
 export const inputListenerProcess = () => {	
 	//Triggering actions without Enter key

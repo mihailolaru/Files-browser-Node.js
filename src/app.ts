@@ -1,9 +1,9 @@
 import os from 'os';
 import figlet from 'figlet';
 // @ts-ignore
-import { tableRender } from './handlers/tableRender.handler.ts';
+import { tableRender } from './handlers/tableRender.handler.js';
 // @ts-ignore
-import { inputListenerProcess } from './processes/keyListener.process.ts';
+import { inputListenerProcess } from './processes/keyListener.process.js';
 
 const initCli = () => {
 	if (os.platform() === 'win32' || os.platform() === 'linux') {
