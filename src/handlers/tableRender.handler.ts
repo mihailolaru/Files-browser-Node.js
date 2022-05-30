@@ -8,6 +8,12 @@ import boxen from 'boxen';
 import chalk from 'chalk';
 import dedent from 'dedent-js';
 
+export const getCurrentFilesList = () => {
+	filesObject.length = 0;
+	commandExec('getFiles');
+	commandExec('getDirectories');
+};
+
 const table = () => {
 	//List the files list. If any in the filesObject.
 	if (filesObject.length > 0 && filesObject?.[0]?.name !== '..') {
@@ -40,12 +46,6 @@ const table = () => {
 				);
 		}
 	}
-};
-
-export const getCurrentFilesList = () => {
-	filesObject.length = 0;
-	commandExec('getFiles');
-	commandExec('getDirectories');
 };
 
 export const tableRender = () => {

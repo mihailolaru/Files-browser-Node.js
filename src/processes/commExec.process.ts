@@ -26,8 +26,7 @@ export const commandExec = (key?: string, filename?: string) => {
 							selected: false,
 						});
 					}
-
-					//if ( key === 'getFiles') tableRender();
+					
 				}
 			},
 		);
