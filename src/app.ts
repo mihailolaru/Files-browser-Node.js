@@ -1,12 +1,13 @@
 import os from 'os';
 import figlet from 'figlet';
-import { tableRender } from './handlers/tableRender.handler.js';
+import { tableRender, getCurrentFilesList } from './handlers/tableRender.handler.js';
 import { inputListenerProcess } from './processes/keyListener.process.js';
 
 const initCli = () => {
 	if (os.platform() === 'win32' || os.platform() === 'linux') {
-		tableRender();
 		inputListenerProcess();
+		getCurrentFilesList();
+		tableRender();
 	} else {
 		figlet.text(
 			'ERROR. The OS is not supported',
