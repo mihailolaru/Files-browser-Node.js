@@ -5,6 +5,7 @@ import { filesObject, COMMANDS } from '../resources.js';
 
 export const commandExec = (key?: string, filename?: string) => {
 	if (key) {
+		console.log('commandExec() key: ', key);
 		exec(
 			`${COMMANDS[key === '..' ? 'cdBack' : key]}${filename || ''}`,
 			async (error, stdout, stderr) => {

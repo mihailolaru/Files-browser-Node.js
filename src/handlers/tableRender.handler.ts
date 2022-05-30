@@ -15,8 +15,10 @@ export const getCurrentFilesList = () => {
 };
 
 const table = () => {
+	//console.log('table()');
+
 	//List the files list. If any in the filesObject.
-	if (filesObject.length > 0 && filesObject?.[0]?.name !== '..') {
+	if (filesObject?.[0]?.name !== '..') {
 		filesObject.unshift({
 			name: '..',
 			type: 'dir',

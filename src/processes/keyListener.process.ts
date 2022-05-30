@@ -6,7 +6,6 @@ import { tableRender, getCurrentFilesList } from '../handlers/tableRender.handle
 export const inputListenerProcess = () => {
 	//The selected file.
 	const file = filesObject.find((element) => element?.selected === true);
-
 	//Triggering actions without Enter key
 	if (process.stdin.isTTY) process.stdin.setRawMode(true);
 	// Continues process after key press
@@ -21,23 +20,32 @@ export const inputListenerProcess = () => {
 		} else if (key.toString() === '\u001B\u005B\u0041') {
 			// up
 			for (let i = 0; i < filesObject.length; i++) {
-				if (filesObject[i]?.selected === true && i !== 0) {
+				
+				if ( filesObject[i]?.selected === true && i>0 ) {
+					//console.log('UP i: ', i);					
+					//console.log('UP filesObject: ', filesObject);
 					filesObject[i].selected = false;
-					filesObject[i - 1].selected = true;
+					filesObject[i - 1].selected = true;					
 					tableRender();
 					return;
 				}
 			}
+			//console.log('');
 		} else if (key.toString() === '\u001B\u005B\u0042') {
 			// Down
 			for (let i = 0; i < filesObject.length; i++) {
-				if (filesObject[i]?.selected === true && i < filesObject.length - 1) {
+				
+
+				if (filesObject[i]?.selected === true && i < filesObject.length-1) {
+					//console.log('DOWN i: ', i);					
+					//console.log('DOWN filesObject: ', filesObject);
 					filesObject[i].selected = false;
 					filesObject[i + 1].selected = true;
 					tableRender();
 					return;
 				}
 			}
+			//console.log('');
 		} else if (key.toString() === '\u006F') {
 			// Open
 			if (file?.type === 'file') return commandExec('openInEditor', file?.name);
