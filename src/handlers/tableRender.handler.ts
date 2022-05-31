@@ -8,15 +8,18 @@ import boxen from 'boxen';
 import chalk from 'chalk';
 import dedent from 'dedent-js';
 
-export const getCurrentFilesList = () => {
-	filesObject.length = 0;
-	commandExec('getFiles');
-	commandExec( 'getDirectories');
+export const getCurrentFilesList = async () => {
+	// CLear the files object
+	filesObject.length = 0;	
+	// Adding new data	
+	await commandExec('getDirectories');
+	await commandExec('getFiles');
+	tableRender();	
 };
 
-const table = () => {	
+const table = async () => {	
 	console.log('+--------------------------------------------------------------+');
-	console.log(` path: ${commandExec('currentDirPath')}                        `);
+	console.log(` path: ${await commandExec('currentDirPath')}                        `);
 	console.log('+--------------------------------------------------------------+');
 	console.log(' Filename                                                       ');
 	console.log('+--------------------------------------------------------------+');
@@ -56,7 +59,9 @@ const table = () => {
 	console.log('+--------------------------------------------------------------+');
 };
 
-export const tableRender = () => {
+export const tableRender = async () => {
+	await commandExec('clearCMD');
+	
 	figlet.text(
 		'File Manager',
 		{

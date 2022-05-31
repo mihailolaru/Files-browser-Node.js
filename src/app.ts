@@ -6,8 +6,7 @@ import { inputListenerProcess } from './processes/keyListener.process.js';
 const initCli = () => {
 	if (os.platform() === 'win32' || os.platform() === 'linux') {		
 		inputListenerProcess();
-		getCurrentFilesList();
-		tableRender();
+		getCurrentFilesList();		
 	} else {
 		figlet.text(
 			'ERROR. The OS is not supported',

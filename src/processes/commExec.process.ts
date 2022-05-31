@@ -5,42 +5,43 @@ import { tableRender, getCurrentFilesList } from '../handlers/tableRender.handle
 import { filesObject, COMMANDS } from '../resources.js';
 
 export const commandExec = (key?: string, filename?: string) => {
-	console.log('commandExec() key: ', key);
+	return new Promise((resolve, reject) => {
+		if (key === 'openInEditor') {
+			const child = child_process.spawn(
+				os.platform() === 'win32' ? 'notepad' : 'nano',
+				[filename],
+				{
+					stdio: 'inherit',
+				},
+			);
 
-	if(key === 'openInEditor'){
-		const child = child_process.spawn( os.platform() === 'win32' ? 'notepad' : 'nano', [filename], {
-			stdio: 'inherit'
-		});
-
-		child.on('exit', () => {
-			getCurrentFilesList();
-			tableRender();
-		});
-	}
-
-	child_process.exec(`${COMMANDS[key === '..' ? 'cdBack' : key]}${filename || ''}`, (error, stdout, stderr) => {
-		if (error) {
-			console.log(`error: ${error.message}`);
-			return;
+			child.on('exit', () => {
+				getCurrentFilesList();
+				tableRender();
+			});
 		}
-		if (stderr) {
-			console.log(`stderr: ${stderr}`);
-			return;
-		}
-		if (key === 'getDirectories' || key === 'getFiles') {
-			const filesList = stdout.split(os.platform() === 'win32' ? '\r\n' : '\n');
 
-			for (let i = 0; i < filesList.length - 1; i++) {
-				filesObject.push({
-					name: filesList[i],
-					type: key === 'getDirectories' ? 'dir' : 'file',
-					selected: false,
-				});
+		child_process.exec(`${COMMANDS[key]}${filename || ''}`, (error, stdout, stderr) => {
+			if (error) {
+				console.log(`error: ${error.message}`);
+				return;
 			}
-		}
-		return stdout;
-	});
+			if (stderr) {
+				console.log(`stderr: ${stderr}`);
+				return;
+			}
+			if (key === 'getDirectories' || key === 'getFiles') {
+				const filesList = stdout.split(os.platform() === 'win32' ? '\r\n' : '\n');
 
-	
-	
+				for (let i = 0; i < filesList.length - 1; i++) {
+					filesObject.push({
+						name: filesList[i],
+						type: key === 'getDirectories' ? 'dir' : 'file',
+						selected: false,
+					});
+				}
+			}
+			resolve(stdout);
+		});
+	});
 };

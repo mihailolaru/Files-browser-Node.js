@@ -18,38 +18,36 @@ export const inputListenerProcess = () => {
 		} else if (key.toString() === '\u001B\u005B\u0041') {
 			// up
 			for (let i = 0; i < filesObject.length; i++) {
-				
-				if ( filesObject[i]?.selected === true && i>0 ) {				
+				if (filesObject[i]?.selected === true && i > 0) {
 					filesObject[i].selected = false;
-					filesObject[i - 1].selected = true;			
-					//commandExec('clearCMD');		
-					tableRender();
-					return;
-				}
-			}			
-		} else if (key.toString() === '\u001B\u005B\u0042') {
-			// Down
-			for (let i = 0; i < filesObject.length; i++) {
-				if (filesObject[i]?.selected === true && i < filesObject.length-1) {					
-					filesObject[i].selected = false;
-					filesObject[i + 1].selected = true;
-					//commandExec('clearCMD');
+					filesObject[i - 1].selected = true;					
 					tableRender();
 					return;
 				}
 			}
-			
+		} else if (key.toString() === '\u001B\u005B\u0042') {
+			// Down
+			for (let i = 0; i < filesObject.length; i++) {
+				if (filesObject[i]?.selected === true && i < filesObject.length - 1) {
+					filesObject[i].selected = false;
+					filesObject[i + 1].selected = true;					
+					tableRender();
+					return;
+				}
+			}
 		} else if (key.toString() === '\u006F') {
 			// Selected file
 			const file = filesObject.find((element) => element?.selected === true);
 			// Open
-			if (file?.type === 'file') {						
+			if (file?.type === 'file') {
 				commandExec('openInEditor', file?.name);
 				return;
-			}	
-			commandExec('cdForward', file?.name);
+			}
+			commandExec(
+				file?.name === '..' ? 'cdBack' : 'cdForward',
+				file?.name === '..' ? null : file?.name,
+			);
 			getCurrentFilesList();
-			tableRender();
 			return;
 		} else if (key.toString() == '\u0064') {
 			// Selected file
@@ -57,7 +55,6 @@ export const inputListenerProcess = () => {
 			// Delete
 			commandExec(file?.type === 'dir' ? 'deleteDirectory' : 'deleteFile', file?.name);
 			getCurrentFilesList();
-			tableRender();
 			return;
 		} else {
 			// If none of the above just output the key value.
