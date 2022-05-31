@@ -4,7 +4,7 @@ import { tableRender, getCurrentFilesList } from './handlers/tableRender.handler
 import { inputListenerProcess } from './processes/keyListener.process.js';
 
 const initCli = () => {
-	if (os.platform() === 'win32' || os.platform() === 'linux') {
+	if (os.platform() === 'win32' || os.platform() === 'linux') {		
 		inputListenerProcess();
 		getCurrentFilesList();
 		tableRender();

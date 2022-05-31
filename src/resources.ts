@@ -4,7 +4,7 @@ const commandsList = {
 	wind32: {
 		cdBack: 'cd ..',
 		cdForward: 'cd ',
-		currentDirePath: 'cd',	
+		currentDirPath: 'cd',	
 		deleteFile: 'del ',
 		deleteDirectory: 'del -y ',
 		getDirectories: 'dir /ad/b',
@@ -21,7 +21,7 @@ const commandsList = {
 	linux: {
 		cdBack: 'cd ..',
 		cdForward: 'cd ',
-		currentDirePath: 'pwd',		
+		currentDirPath: 'pwd',		
 		deleteFile: 'rm ',
 		deleteDirectory: 'rm -r ',
 		getDirectories: 'ls -d */',

@@ -4,8 +4,7 @@ import { filesObject } from '../resources.js';
 import { tableRender, getCurrentFilesList } from '../handlers/tableRender.handler.js';
 
 export const inputListenerProcess = () => {
-	//The selected file.
-	const file = filesObject.find((element) => element?.selected === true);
+
 	//Triggering actions without Enter key
 	if (process.stdin.isTTY) process.stdin.setRawMode(true);
 	// Continues process after key press
@@ -21,39 +20,39 @@ export const inputListenerProcess = () => {
 			// up
 			for (let i = 0; i < filesObject.length; i++) {
 				
-				if ( filesObject[i]?.selected === true && i>0 ) {
-					//console.log('UP i: ', i);					
-					//console.log('UP filesObject: ', filesObject);
+				if ( filesObject[i]?.selected === true && i>0 ) {				
 					filesObject[i].selected = false;
-					filesObject[i - 1].selected = true;					
+					filesObject[i - 1].selected = true;			
+					//commandExec('clearCMD');		
 					tableRender();
 					return;
 				}
-			}
-			//console.log('');
+			}			
 		} else if (key.toString() === '\u001B\u005B\u0042') {
 			// Down
 			for (let i = 0; i < filesObject.length; i++) {
-				
-
-				if (filesObject[i]?.selected === true && i < filesObject.length-1) {
-					//console.log('DOWN i: ', i);					
-					//console.log('DOWN filesObject: ', filesObject);
+				if (filesObject[i]?.selected === true && i < filesObject.length-1) {					
 					filesObject[i].selected = false;
 					filesObject[i + 1].selected = true;
+					//commandExec('clearCMD');
 					tableRender();
 					return;
 				}
 			}
 			//console.log('');
 		} else if (key.toString() === '\u006F') {
+			const file = filesObject.find((element) => element?.selected === true);
 			// Open
-			if (file?.type === 'file') return commandExec('openInEditor', file?.name);
+			if (file?.type === 'file') {						
+				commandExec('openInEditor', file?.name);
+				return;
+			}	
 			commandExec('cdForward', file?.name);
 			getCurrentFilesList();
 			tableRender();
 			return;
-		} else if (key.toString() == '\u0064' && file) {
+		} else if (key.toString() == '\u0064') {
+			const file = filesObject.find((element) => element?.selected === true);
 			// Delete
 			commandExec(file?.type === 'dir' ? 'deleteDirectory' : 'deleteFile', file?.name);
 			getCurrentFilesList();

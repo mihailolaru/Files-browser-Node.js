@@ -11,11 +11,15 @@ import dedent from 'dedent-js';
 export const getCurrentFilesList = () => {
 	filesObject.length = 0;
 	commandExec('getFiles');
-	commandExec('getDirectories');
+	commandExec( 'getDirectories');
 };
 
-const table = () => {
-	//console.log('table()');
+const table = () => {	
+	console.log('+--------------------------------------------------------------+');
+	console.log(` path: ${commandExec('currentDirPath')}                        `);
+	console.log('+--------------------------------------------------------------+');
+	console.log(' Filename                                                       ');
+	console.log('+--------------------------------------------------------------+');
 
 	//List the files list. If any in the filesObject.
 	if (filesObject?.[0]?.name !== '..') {
@@ -24,35 +28,35 @@ const table = () => {
 			type: 'dir',
 			selected: false,
 		});
-
-		//Check if no elements are selected in the array, set as selected the first element.
-		if (filesObject.filter((element) => element?.selected === true)?.length === 0) {
-			filesObject[1].selected = true;
-		}
-
-		for (let i = 0; i < filesObject.length; i++) {
-			let selected = filesObject[i]?.selected;
-			//Check if a directory is selected.
-			if (filesObject[i]?.type === 'dir')
-				console.log(
-					selected
-						? chalk.bgGreen(chalk.red(filesObject?.[i]?.name))
-						: chalk.redBright(filesObject[i]?.name),
-				);
-			//Check if a file is selected.
-			if (filesObject[i]?.type === 'file')
-				console.log(
-					selected
-						? chalk.bgGreen(chalk.blue(filesObject?.[i]?.name))
-						: chalk.cyanBright(filesObject?.[i]?.name),
-				);
-		}
 	}
+	
+	//Check if no elements are selected in the array, set as selected the first element.
+	if (filesObject.filter((element) => element.selected === true)?.length === 0) {		
+		filesObject[0].selected = true;
+	}
+
+	//Display all the elements.
+	for (let i = 0; i < filesObject.length; i++) {
+		let selected = filesObject[i]?.selected;
+		//Check if a directory is selected.
+		if (filesObject[i]?.type === 'dir')
+			console.log('',
+				selected
+					? chalk.bgGreen(chalk.red(filesObject?.[i]?.name))
+					: chalk.redBright(filesObject[i]?.name)
+			);
+		//Check if a file is selected.
+		if (filesObject[i]?.type === 'file')
+		console.log('',
+				selected
+					? chalk.bgGreen(chalk.blue(filesObject?.[i]?.name))
+					: chalk.cyanBright(filesObject?.[i]?.name)
+			);
+	}
+	console.log('+--------------------------------------------------------------+');
 };
 
 export const tableRender = () => {
-	commandExec('clearCMD');
-
 	figlet.text(
 		'File Manager',
 		{
