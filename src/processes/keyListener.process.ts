@@ -4,7 +4,6 @@ import { filesObject } from '../resources.js';
 import { tableRender, getCurrentFilesList } from '../handlers/tableRender.handler.js';
 
 export const inputListenerProcess = () => {
-
 	//Triggering actions without Enter key
 	if (process.stdin.isTTY) process.stdin.setRawMode(true);
 	// Continues process after key press
@@ -39,8 +38,9 @@ export const inputListenerProcess = () => {
 					return;
 				}
 			}
-			//console.log('');
+			
 		} else if (key.toString() === '\u006F') {
+			// Selected file
 			const file = filesObject.find((element) => element?.selected === true);
 			// Open
 			if (file?.type === 'file') {						
@@ -52,6 +52,7 @@ export const inputListenerProcess = () => {
 			tableRender();
 			return;
 		} else if (key.toString() == '\u0064') {
+			// Selected file
 			const file = filesObject.find((element) => element?.selected === true);
 			// Delete
 			commandExec(file?.type === 'dir' ? 'deleteDirectory' : 'deleteFile', file?.name);

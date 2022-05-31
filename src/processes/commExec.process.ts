@@ -8,7 +8,7 @@ export const commandExec = (key?: string, filename?: string) => {
 	console.log('commandExec() key: ', key);
 
 	if(key === 'openInEditor'){
-		const child = child_process.spawn('nano', [filename], {
+		const child = child_process.spawn( os.platform() === 'win32' ? 'notepad' : 'nano', [filename], {
 			stdio: 'inherit'
 		});
 
@@ -38,7 +38,6 @@ export const commandExec = (key?: string, filename?: string) => {
 				});
 			}
 		}
-		console.log('stdout', stdout);
 		return stdout;
 	});
 
