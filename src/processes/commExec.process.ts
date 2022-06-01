@@ -5,10 +5,10 @@ import { tableRender, getCurrentFilesList } from '../handlers/tableRender.handle
 import { filesObject, COMMANDS } from '../resources.js';
 
 export const commandExec = (key?: string, filename?: string) => {
-    console.log('key: ', key, ', COMMANDS[key]: ', COMMANDS[key]);
-    return new Promise((resolve, reject) => {
-        if (key === 'openInEditor') {
-            //console.log('openInEditor worked');
+   
+	return new Promise((resolve, reject) => {
+		// Spawning a child process for the text editor.
+        if (key === 'openInEditor') {            
             const child = child_process.spawn(
                 os.platform() === 'win32' ? 'notepad' : 'nano',
                 [filename],
@@ -23,6 +23,7 @@ export const commandExec = (key?: string, filename?: string) => {
             });
         }
 
+		// Executing the basic commands with exec()
         child_process.exec(`${COMMANDS[key]}${filename || ''}`, (error, stdout, stderr) => {
             if (error) {
                 console.log(`error: ${error.message}`);
@@ -31,7 +32,8 @@ export const commandExec = (key?: string, filename?: string) => {
             if (stderr) {
                 console.log(`stderr: ${stderr}`);
                 return;
-            }
+			}
+			// Pushing the directories and files to the filesObject.
             if (key === 'getDirectories' || key === 'getFiles') {
                 const filesList = stdout.split(os.platform() === 'win32' ? '\r\n' : '\n');
 
@@ -42,8 +44,9 @@ export const commandExec = (key?: string, filename?: string) => {
                         selected: false,
                     });
                 }
-            }
-            resolve(stdout);
+			}
+			// In case of success, returning the stdout. For now, this is used only for displaying the path to the current directory.
+			resolve(stdout.trim());
         });
     });
 };

@@ -12,11 +12,11 @@ export const inputListenerProcess = () => {
 
     process.stdin.on('data', async key => {
         if (key.toString() === '\u0071') {
-            // Quit
+            // Quit app
             process.exit();
             return;
         } else if (key.toString() === '\u001B\u005B\u0041') {
-            // Up
+            // Up arrow key
             for (let i = 0; i < filesObject.length; i++) {
                 if (filesObject[i]?.selected === true && i > 0) {
                     filesObject[i].selected = false;
@@ -26,7 +26,7 @@ export const inputListenerProcess = () => {
                 }
             }
         } else if (key.toString() === '\u001B\u005B\u0042') {
-            // Down
+            // Down arrow key.
             for (let i = 0; i < filesObject.length; i++) {
                 if (filesObject[i]?.selected === true && i < filesObject.length - 1) {
                     filesObject[i].selected = false;
@@ -35,7 +35,7 @@ export const inputListenerProcess = () => {
                     return;
                 }
             }
-        } else if (key.toString() === '\u006F') {
+		} else if (key.toString() === '\u006F') {
             // Selected file
             const file = filesObject.find((element) => element?.selected === true);
             // Open

@@ -1,15 +1,18 @@
 import os from 'os';
 import figlet from 'figlet';
-import { tableRender, getCurrentFilesList } from './handlers/tableRender.handler.js';
+import { getCurrentFilesList } from './handlers/tableRender.handler.js';
 import { inputListenerProcess } from './processes/keyListener.process.js';
 
 const initCli = () => {
-    if (os.platform() === 'win32' || os.platform() === 'linux') {       
+    if (os.platform() === 'win32' || os.platform() === 'linux') {    
+        // Initialize the key press listener process.
         inputListenerProcess();
+        // Getting the current directory content and rendering the table.
         getCurrentFilesList();      
     } else {
+        // In case of not supported OS display a warning message and close the app in 10 seconds.
         figlet.text(
-            'ERROR. The OS is not supported',
+            'ERROR. The OS is not supported. \n The app will auto shut down in 10 seconds.',
             {
                 horizontalLayout: 'default',
                 verticalLayout: 'default',
@@ -26,6 +29,7 @@ const initCli = () => {
                 return;
             },
         );
+        setTimeout(process.exit(), 10000);
     }
 };
 

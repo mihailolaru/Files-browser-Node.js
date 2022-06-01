@@ -19,12 +19,12 @@ export const getCurrentFilesList = async () => {
 
 const table = async () => { 
     console.log('+--------------------------------------------------------------+');
-    console.log(` path: ${await commandExec('currentDirPath')}                        `);
+    console.log('                       #  File names  #                         ');
     console.log('+--------------------------------------------------------------+');
-    console.log(' Filename                                                       ');
+    console.log(` Path: ${await commandExec('currentDirPath')}                   `);
     console.log('+--------------------------------------------------------------+');
 
-    //List the files list. If any in the filesObject.
+    // Include the 'back' object (..) if it is not already included.
     if (filesObject?.[0]?.name !== '..') {
         filesObject.unshift({
             name: '..',
@@ -56,12 +56,13 @@ const table = async () => {
                     : chalk.cyanBright(filesObject?.[i]?.name), ''
             );
     }
-    console.log('+--------------------------------------------------------------+');
+    console.log('+--------------------------------------------------------------+');    
 };
 
-export const tableRender = async () => {
+export const tableRender = () => {
+    // Clear the console window before a new table is rendered.
     console.clear();
-    
+    // Display the main app title.
     figlet.text(
         'File Manager',
         {
@@ -77,7 +78,7 @@ export const tableRender = async () => {
                 return;
             }
 
-            // Display title
+            // The app title
             console.log(title);
 
             // Display the controls list
@@ -90,7 +91,7 @@ export const tableRender = async () => {
                     borderStyle: 'double',
                 }),
             );
-
+            // The table    
             table();
         },
     );
