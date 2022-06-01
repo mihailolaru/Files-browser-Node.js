@@ -10,7 +10,7 @@ export const inputListenerProcess = () => {
     process.stdin.resume();
     process.stdin.setEncoding('utf8');
 
-    process.stdin.on('data', async (key) => {
+    process.stdin.on('data', async key => {
         if (key.toString() === '\u0071') {
             // Quit
             process.exit();
@@ -47,22 +47,19 @@ export const inputListenerProcess = () => {
                 file?.name === '..' ? 'cdBack' : 'cdForward',
                 file?.name === '..' ? null : file?.name,
             ).then(() => getCurrentFilesList());
-            return;
-        } else if (key.toString() === '\uE007') {
-            console.log('ENTER key');
-            return;
-        } else if (key.toString() == '\u0064') {
-            // Selected file
-            const file = filesObject.find((element) => element?.selected === true);
+            return;    
+		} else if (key.toString() === '\u0064') {			
+			// Selected file
+			const file = filesObject.find((element) => element?.selected === true);
 
-            // Delete command
-            commandExec(file?.type === 'dir' ? 'deleteDirectory' : 'deleteFile', file?.name);
-            getCurrentFilesList();
-            return;
-        } else {
-            // If none of the above just output the key value.
-            console.log(key);
-        }
+			// Delete command
+			commandExec(file?.type === 'dir' ? 'deleteDirectory' : 'deleteFile', file?.name);
+			getCurrentFilesList();
+			return;
+		} else {
+			// If none of the above just output the key value.
+			console.log('key: ', key);
+		}
     });
 };
 
@@ -70,4 +67,3 @@ export const inputListenerProcess = () => {
 // '\u001B\u005B\u0043' - 'right'
 // '\u001B\u005B\u0042' - 'down'
 // '\u001B\u005B\u0044' - 'left'
-// '\u2386' - 'enter'
