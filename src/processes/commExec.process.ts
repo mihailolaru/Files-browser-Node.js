@@ -5,6 +5,7 @@ import { tableRender, getCurrentFilesList } from '../handlers/tableRender.handle
 import { filesObject, COMMANDS } from '../resources.js';
 
 export const commandExec = (key?: string, filename?: string) => {
+	//console.log('key: ', key, ', COMMANDS[key]: ', COMMANDS[key]);
 	return new Promise((resolve, reject) => {
 		if (key === 'openInEditor') {
 			const child = child_process.spawn(

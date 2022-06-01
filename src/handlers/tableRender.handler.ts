@@ -46,21 +46,21 @@ const table = async () => {
 			console.log('',
 				selected
 					? chalk.bgGreen(chalk.red(filesObject?.[i]?.name))
-					: chalk.redBright(filesObject[i]?.name)
+					: chalk.redBright(filesObject[i]?.name), ''
 			);
 		//Check if a file is selected.
 		if (filesObject[i]?.type === 'file')
 		console.log('',
 				selected
 					? chalk.bgGreen(chalk.blue(filesObject?.[i]?.name))
-					: chalk.cyanBright(filesObject?.[i]?.name)
+					: chalk.cyanBright(filesObject?.[i]?.name), ''
 			);
 	}
 	console.log('+--------------------------------------------------------------+');
 };
 
 export const tableRender = async () => {
-	await commandExec('clearCMD');
+	console.clear();
 	
 	figlet.text(
 		'File Manager',

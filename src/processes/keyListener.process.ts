@@ -10,7 +10,8 @@ export const inputListenerProcess = () => {
 	process.stdin.resume();
 	process.stdin.setEncoding('utf8');
 
-	process.stdin.on('data', (key) => {
+	process.stdin.on('data', async key => {
+		
 		if (key.toString() === '\u0071') {
 			// Quit
 			process.exit();
@@ -52,8 +53,9 @@ export const inputListenerProcess = () => {
 		} else if (key.toString() == '\u0064') {
 			// Selected file
 			const file = filesObject.find((element) => element?.selected === true);
-			// Delete
-			commandExec(file?.type === 'dir' ? 'deleteDirectory' : 'deleteFile', file?.name);
+
+			// Delete command
+			await commandExec(file?.type === 'dir' ? 'deleteDirectory' : 'deleteFile', file?.name);						
 			getCurrentFilesList();
 			return;
 		} else {
