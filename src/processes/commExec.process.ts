@@ -27,20 +27,8 @@ export const commandExec = (key?: string, filename?: string) => {
 			console.log('if key === cdBack || key === cdForward');
 			process.chdir(key === 'cdBack' ? '..' : filename);
 			getCurrentFilesList();
-			tableRender();
-			// child_process.exec('', { cwd: filename }, (error, stdout, stderr) => {
-			// 	if (error) {
-			// 		console.log(`error: ${error.message}`);
-			// 		return;
-			// 	}
-			// 	if (stderr) {
-			// 		console.log(`stderr: ${stderr}`);
-			// 		return;
-			// 	}
-
-			// 	// In case of success, returning the stdout. For now, this is used only for displaying the path to the current directory.
-			// 	resolve(stdout.trim());
-			// });
+			tableRender();			
+			resolve('Success');		
 		}
 
 		// Executing the basic commands with exec()
