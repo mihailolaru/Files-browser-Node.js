@@ -4,9 +4,7 @@ import child_process from 'child_process';
 import { getCurrentFilesList } from '../handlers/tableRender.handler.js';
 import { filesObject, COMMANDS } from '../resources.js';
 
-export const commandExec = (key?: string, filename?: string) => {
-	console.log('-> commandExec() -> key: ', key, ', filename: ', filename);
-	console.log('');
+export const commandExec = (key?: string, filename?: string) => {	
 
 	return new Promise((resolve, reject) => {
 		// Spawning a child process for the text editor.
@@ -37,6 +35,7 @@ export const commandExec = (key?: string, filename?: string) => {
 		// Executing the basic commands with exec()
 		child_process.exec(`${COMMANDS[key]}${filename || ''}`, (error, stdout, stderr) => {
 			if (error) {
+				if (error.message.includes('File Not Found')) resolve('no files are found');
 				reject(`error: ${error.message}`);
 			}
 			if (stderr) {
@@ -47,15 +46,9 @@ export const commandExec = (key?: string, filename?: string) => {
 			if (key === 'getDirectories' || key === 'getFiles') {
 				const fileNames = stdout
 					.split(os.platform() === 'win32' ? '\r\n' : '\n')
-					.filter((item) => item !== '');
-
-				console.log('-> if getDirectories || getFiles stdout: \n', stdout);
-				console.log('');
+					.filter((item) => item !== '');			
 
 				if (fileNames.length > 0) {
-					console.log('-> commandExec() filesList: ', fileNames);
-					console.log('');
-
 					for (let i = 0; i < fileNames.length; i++) {
 						filesObject.push({
 							name: fileNames[i],

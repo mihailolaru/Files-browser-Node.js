@@ -3,10 +3,7 @@ import figlet from 'figlet';
 import { getCurrentFilesList } from './handlers/tableRender.handler.js';
 import { inputListenerProcess } from './processes/keyListener.process.js';
 
-const initCli = () => {
-    console.log('-> initCli()');
-    console.log('');
-    
+const initCli = () => {    
     if (os.platform() === 'win32' || os.platform() === 'linux') {    
         // Initialize the key press listener process.
         inputListenerProcess();

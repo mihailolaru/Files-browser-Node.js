@@ -9,9 +9,7 @@ import chalk from 'chalk';
 import dedent from 'dedent-js';
 
 export const getCurrentFilesList = async () => {
-    console.log('-> getCurrentFilesList()');
-    console.log('');
-
+  
 	// CLear the files object
     filesObject.length = 0;
     
@@ -68,7 +66,6 @@ const table = async () => {
 };
 
 export const tableRender = () => {
-    console.log('-> tableRenderer()');
 
 	// Clear the console window before a new table is rendered.
     console.clear();
