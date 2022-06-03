@@ -23,44 +23,46 @@ export const commandExec = (key?: string, filename?: string) => {
 			return;
 		}
 
-		//https://stackoverflow.com/questions/15629923/nodejs-exec-does-not-work-for-cd-shell-cmd
-		// exec() with change working directory arg for changing directory commands.
+		// Changing directory
 		if (key === 'cdBack' || key === 'cdForward') {
 			process.chdir(filename);
 			getCurrentFilesList();
 			return;
 		}
+// 'File Not Found' ||
+	// Executing the basic commands with exec()
+	child_process.exec(`${COMMANDS[key]}${filename || ''}`, (error, stdout, stderr) => {
+		if (error) {
+			if (
+				error.message.includes('ls -p | grep -v /') ||
+				error.message.includes('File Not Found')
+			)
+				resolve('No files found');
+			reject(`ERROR: ${error.message}`);
+		}
+		if (stderr) {
+			reject(`stderr: ${stderr}`);
+		}
 
-		// Executing the basic commands with exec()
-		child_process.exec(`${COMMANDS[key]}${filename || ''}`, (error, stdout, stderr) => {
-			if (error) {
-				if (error.message.includes('File Not Found')) resolve('no files are found');
-				reject(`error: ${error.message}`);
-			}
-			if (stderr) {
-				reject(`stderr: ${stderr}`);
-			}
+		// Pushing the directories and files to the filesObject.
+		if (key === 'getDirectories' || key === 'getFiles') {
+			const fileNames = stdout
+				.split(os.platform() === 'win32' ? '\r\n' : '\n')
+				.filter((item) => item !== '');
 
-			// Pushing the directories and files to the filesObject.
-			if (key === 'getDirectories' || key === 'getFiles') {
-				const fileNames = stdout
-					.split(os.platform() === 'win32' ? '\r\n' : '\n')
-					.filter((item) => item !== '');
-
-				if (fileNames.length > 0) {
-					for (let i = 0; i < fileNames.length; i++) {
-						filesObject.push({
-							name: fileNames[i],
-							type: key === 'getDirectories' ? 'dir' : 'file',
-							selected: false,
-						});
-					}
+			if (fileNames.length > 0) {
+				for (let i = 0; i < fileNames.length; i++) {
+					filesObject.push({
+						name: fileNames[i],
+						type: key === 'getDirectories' ? 'dir' : 'file',
+						selected: false,
+					});
 				}
-				//return;
 			}
+		}
 
-			// In case of success, returning the stdout. For now, this is used only for displaying the path to the current directory.
-			resolve(stdout.trim());
-		});
+		// In case of success, returning the stdout. For now, this is used only for displaying the path to the current directory.
+		resolve(stdout.trim());
+	});
 	});
 };
