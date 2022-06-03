@@ -4,8 +4,7 @@ import child_process from 'child_process';
 import { getCurrentFilesList } from '../handlers/tableRender.handler.js';
 import { filesObject, COMMANDS } from '../resources.js';
 
-export const commandExec = (key?: string, filename?: string) => {	
-
+export const commandExec = (key?: string, filename?: string) => {
 	return new Promise((resolve, reject) => {
 		// Spawning a child process for the text editor.
 		if (key === 'openInEditor') {
@@ -15,10 +14,10 @@ export const commandExec = (key?: string, filename?: string) => {
 				{
 					stdio: 'inherit',
 				},
-			);			
+			);
 
 			child.on('exit', () => {
-				getCurrentFilesList();				
+				getCurrentFilesList();
 			});
 
 			return;
@@ -46,7 +45,7 @@ export const commandExec = (key?: string, filename?: string) => {
 			if (key === 'getDirectories' || key === 'getFiles') {
 				const fileNames = stdout
 					.split(os.platform() === 'win32' ? '\r\n' : '\n')
-					.filter((item) => item !== '');			
+					.filter((item) => item !== '');
 
 				if (fileNames.length > 0) {
 					for (let i = 0; i < fileNames.length; i++) {
