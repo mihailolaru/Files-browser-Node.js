@@ -4,6 +4,9 @@ import { getCurrentFilesList } from './handlers/tableRender.handler.js';
 import { inputListenerProcess } from './processes/keyListener.process.js';
 
 const initCli = () => {
+    console.log('-> initCli()');
+    console.log('');
+    
     if (os.platform() === 'win32' || os.platform() === 'linux') {    
         // Initialize the key press listener process.
         inputListenerProcess();
@@ -20,8 +23,7 @@ const initCli = () => {
                 whitespaceBreak: true,
             },
             function (err, title) {
-                if (err) {
-                    console.log('Something went wrong...');
+                if (err) {                
                     console.dir(err);
                     return;
                 }
