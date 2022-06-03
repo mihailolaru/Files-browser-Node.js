@@ -71,7 +71,7 @@ export const tableRender = () => {
     console.log('-> tableRenderer()');
 
 	// Clear the console window before a new table is rendered.
-	// console.clear();
+    console.clear();
 
 	// Display the main app title.
 	figlet.text(

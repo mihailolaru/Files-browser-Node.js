@@ -6,8 +6,8 @@ import { filesObject, COMMANDS } from '../resources.js';
 
 export const commandExec = (key?: string, filename?: string) => {
 	console.log('-> commandExec() -> key: ', key, ', filename: ', filename);
-	 console.log('');
-	
+	console.log('');
+
 	return new Promise((resolve, reject) => {
 		// Spawning a child process for the text editor.
 		if (key === 'openInEditor') {
@@ -17,44 +17,46 @@ export const commandExec = (key?: string, filename?: string) => {
 				{
 					stdio: 'inherit',
 				},
-			);
+			);			
 
 			child.on('exit', () => {
 				getCurrentFilesList();				
 			});
+
+			return;
 		}
 
 		//https://stackoverflow.com/questions/15629923/nodejs-exec-does-not-work-for-cd-shell-cmd
 		// exec() with change working directory arg for changing directory commands.
-		if ( key === 'cdBack' || key === 'cdForward' ) {			
+		if (key === 'cdBack' || key === 'cdForward') {
 			process.chdir(filename);
-			getCurrentFilesList();					
-			resolve('Success');		
+			getCurrentFilesList();
+			return;
 		}
 
 		// Executing the basic commands with exec()
 		child_process.exec(`${COMMANDS[key]}${filename || ''}`, (error, stdout, stderr) => {
 			if (error) {
-				console.log(`error: ${error.message}`);				
+				reject(`error: ${error.message}`);
 			}
 			if (stderr) {
-				console.log(`stderr: ${stderr}`);				
+				reject(`stderr: ${stderr}`);
 			}
 
 			// Pushing the directories and files to the filesObject.
-			if (key === 'getDirectories' || key === 'getFiles') {				
+			if (key === 'getDirectories' || key === 'getFiles') {
 				const fileNames = stdout
 					.split(os.platform() === 'win32' ? '\r\n' : '\n')
 					.filter((item) => item !== '');
-				
+
 				console.log('-> if getDirectories || getFiles stdout: \n', stdout);
-				console.log('');				
-				
+				console.log('');
+
 				if (fileNames.length > 0) {
 					console.log('-> commandExec() filesList: ', fileNames);
 					console.log('');
 
-					for (let i = 0; i < fileNames.length - 1; i++) {
+					for (let i = 0; i < fileNames.length; i++) {
 						filesObject.push({
 							name: fileNames[i],
 							type: key === 'getDirectories' ? 'dir' : 'file',
@@ -62,6 +64,7 @@ export const commandExec = (key?: string, filename?: string) => {
 						});
 					}
 				}
+				//return;
 			}
 
 			// In case of success, returning the stdout. For now, this is used only for displaying the path to the current directory.
