@@ -78,20 +78,18 @@ export const inputListenerProcess = () => {
 
 				//Delete command
 				if (file?.name !== '..') {
-					rl.question('What is your name ? ', (name) => {
-						console.log(`${name}`);
+					rl.question(`Confirm deletion of ${file?.name} ?`, answer => {
+						if (answer === 'y') {
+							commandExec(file?.type === 'dir' ? 'deleteDirectory' : 'deleteFile', file?.name);
+						}
 						rl.close();
 					});
 
 					rl.on('close', function () {
-						console.log('\nBYE BYE !!!');
-						process.exit(0);
-					});
-
-					// await commandExec(file?.type === 'dir' ? 'deleteDirectory' : 'deleteFile', file?.name);
-					// getCurrentFilesList();
-					// loading = false;
-					// return;
+						getCurrentFilesList();
+						loading = false;
+						return;
+					});			
 				}
 
 				loading = false;
