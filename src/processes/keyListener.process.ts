@@ -2,6 +2,7 @@
 import { commandExec } from '../processes/commExec.process.js';
 import { filesObject } from '../resources.js';
 import { tableRender, getCurrentFilesList } from '../handlers/tableRender.handler.js';
+import readline from 'readline';
 
 export const inputListenerProcess = () => {
 	//Triggering actions without Enter key
@@ -9,6 +10,11 @@ export const inputListenerProcess = () => {
 	// Continues process after key press
 	process.stdin.resume();
 	process.stdin.setEncoding('utf8');
+
+	const rl = readline.createInterface({
+		input: process.stdin,
+		output: process.stdout,
+	});
 
 	process.stdin.on('data', async (key) => {
 		let loading = false;
@@ -54,7 +60,7 @@ export const inputListenerProcess = () => {
 				// Open
 				if (file?.type === 'file') {
 					loading = true;
-					commandExec('openInEditor', file?.name);					
+					commandExec('openInEditor', file?.name);
 					return;
 				}
 				loading = true;
@@ -69,20 +75,30 @@ export const inputListenerProcess = () => {
 				loading = true;
 				// Selected file
 				const file = filesObject.find((element) => element?.selected === true);
-				
+
 				//Delete command
 				if (file?.name !== '..') {
-					await commandExec(file?.type === 'dir' ? 'deleteDirectory' : 'deleteFile', file?.name);
-					getCurrentFilesList();
-					loading = false;
-					return;
-				}			
-				
+					rl.question('What is your name ? ', (name) => {
+						console.log(`${name}`);
+						rl.close();
+					});
+
+					rl.on('close', function () {
+						console.log('\nBYE BYE !!!');
+						process.exit(0);
+					});
+
+					// await commandExec(file?.type === 'dir' ? 'deleteDirectory' : 'deleteFile', file?.name);
+					// getCurrentFilesList();
+					// loading = false;
+					// return;
+				}
+
 				loading = false;
 				return;
 			}
 			return;
-		} else {			
+		} else {
 			return;
 		}
 	});

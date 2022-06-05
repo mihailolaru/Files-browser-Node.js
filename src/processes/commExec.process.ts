@@ -30,8 +30,6 @@ export const commandExec = (key?: string, filename?: string) => {
 		}
 
 
-		
-
 	// Executing the basic commands with exec()
 	child_process.exec(`${COMMANDS[key]}${filename || ''}`, (error, stdout, stderr) => {
 		if (error) {
