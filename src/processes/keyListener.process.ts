@@ -11,16 +11,18 @@ export const inputListenerProcess = () => {
 	process.stdin.resume();
 	process.stdin.setEncoding('utf8');
 
+	//Initialize read line for the deletion prompt.
 	const rl = readline.createInterface({
 		input: process.stdin,
 		output: process.stdout,
 	});
 
+	// Key listener process.
 	process.stdin.on('data', async (key) => {
 		let loading = false;
 
 		if (key.toString() === '\u0071') {
-			// Quit app
+			// Quit app			
 			process.exit();
 			return;
 		} else if (key.toString() === '\u001B\u005B\u0041') {
@@ -78,17 +80,15 @@ export const inputListenerProcess = () => {
 
 				//Delete command
 				if (file?.name !== '..') {
-					rl.question(`Confirm deletion of ${file?.name} ?`, answer => {
-						if (answer === 'y') {
+					rl.question(`Confirm deletion of ${file?.name}? `, answer => {
+						if (answer === 'y') {							
 							commandExec(file?.type === 'dir' ? 'deleteDirectory' : 'deleteFile', file?.name);
-						}
-						rl.close();
+							rl.close();												
+						}						
 					});
 
 					rl.on('close', function () {
-						getCurrentFilesList();
-						loading = false;
-						return;
+						getCurrentFilesList();						
 					});			
 				}
 

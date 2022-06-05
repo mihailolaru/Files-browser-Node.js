@@ -17,7 +17,7 @@ export const commandExec = (key?: string, filename?: string) => {
 			);
 
 			child.on('close', () => {
-				tableRender();				
+				tableRender();
 			});
 			return;
 		}
@@ -28,42 +28,40 @@ export const commandExec = (key?: string, filename?: string) => {
 			getCurrentFilesList();
 			return;
 		}
+		
+		// Executing the basic commands with exec()
+		child_process.exec(`${COMMANDS[key]}${filename || ''}`, (error, stdout, stderr) => {
+			if (error) {
+				if (
+					error.message.includes('ls -ap | grep -v /') ||
+					error.message.includes('ls -d */') ||
+					error.message.includes('File Not Found')
+				)
+					resolve('No files found');
+				reject(`exec() ERROR: ${error.message}`);
+			}
+			if (stderr) {
+				reject(`exec() stderr: ${stderr}`);
+			}
 
+			// Pushing the directories and files to the filesObject.
+			if (key === 'getDirectories' || key === 'getFiles') {
+				const fileNames = stdout
+					.split(os.platform() === 'win32' ? '\r\n' : '\n')
+					.filter((item) => item !== '');
 
-	// Executing the basic commands with exec()
-	child_process.exec(`${COMMANDS[key]}${filename || ''}`, (error, stdout, stderr) => {
-		if (error) {
-			if (
-				error.message.includes('ls -ap | grep -v /') ||
-				error.message.includes('ls -d */') ||
-				error.message.includes('File Not Found')
-			)
-				resolve('No files found');
-			reject(`ERROR: ${error.message}`);
-		}
-		if (stderr) {
-			reject(`stderr: ${stderr}`);
-		}
-
-		// Pushing the directories and files to the filesObject.
-		if (key === 'getDirectories' || key === 'getFiles') {
-			const fileNames = stdout
-				.split(os.platform() === 'win32' ? '\r\n' : '\n')
-				.filter((item) => item !== '');
-
-			if (fileNames.length > 0) {
-				for (let i = 0; i < fileNames.length; i++) {
-					filesObject.push({
-						name: fileNames[i],
-						type: key === 'getDirectories' ? 'dir' : 'file',
-						selected: false,
-					});
+				if (fileNames.length > 0) {
+					for (let i = 0; i < fileNames.length; i++) {
+						filesObject.push({
+							name: fileNames[i],
+							type: key === 'getDirectories' ? 'dir' : 'file',
+							selected: false,
+						});
+					}
 				}
 			}
-		}
-
-		// In case of success, returning the stdout. For now, this is used only for displaying the path to the current directory.
-		resolve(stdout.trim());
-	});
-	});
+			// In case of success, returning the stdout. For now, this is used only for displaying the path to the current directory.
+			resolve(stdout.trim());
+		});	
+	});			
 };
