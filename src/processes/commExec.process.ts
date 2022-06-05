@@ -13,13 +13,12 @@ export const commandExec = (key?: string, filename?: string) => {
 				[filename],
 				{
 					stdio: 'inherit',
-				},
+				},				
 			);
 
 			child.on('exit', () => {
-				getCurrentFilesList();
+				getCurrentFilesList();				
 			});
-
 			return;
 		}
 

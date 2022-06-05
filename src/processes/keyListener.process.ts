@@ -11,56 +11,75 @@ export const inputListenerProcess = () => {
 	process.stdin.setEncoding('utf8');
 
 	process.stdin.on('data', async (key) => {
+		let loading = false;
+
 		if (key.toString() === '\u0071') {
 			// Quit app
 			process.exit();
 			return;
 		} else if (key.toString() === '\u001B\u005B\u0041') {
 			// Up arrow key
-			process.stdin.pause();
-			for (let i = 0; i < filesObject.length; i++) {
-				if (filesObject[i]?.selected === true && i > 0) {
-					filesObject[i].selected = false;
-					filesObject[i - 1].selected = true;
-					tableRender();
-					process.stdin.resume();
-					return;
+			if (loading === false) {
+				for (let i = 0; i < filesObject.length; i++) {
+					if (filesObject[i]?.selected === true && i > 0) {
+						loading = true;
+						filesObject[i].selected = false;
+						filesObject[i - 1].selected = true;
+						tableRender();
+						loading = false;
+						return;
+					}
 				}
 			}
+			return;
 		} else if (key.toString() === '\u001B\u005B\u0042') {
 			// Down arrow key.
-			process.stdin.pause();
-			for (let i = 0; i < filesObject.length; i++) {
-				if (filesObject[i]?.selected === true && i < filesObject.length - 1) {
-					filesObject[i].selected = false;
-					filesObject[i + 1].selected = true;
-					tableRender();
-					process.stdin.resume();
-					return;
+			if (loading === false) {
+				for (let i = 0; i < filesObject.length; i++) {
+					if (filesObject[i]?.selected === true && i < filesObject.length - 1) {
+						loading = true;
+						filesObject[i].selected = false;
+						filesObject[i + 1].selected = true;
+						tableRender();
+						loading = false;
+						return;
+					}
 				}
 			}
+			return;
 		} else if (key.toString() === '\u006F') {
-			// Selected file
-			const file = filesObject.find((element) => element?.selected === true);
-			// Open
-			if (file?.type === 'file') {
-				await commandExec('openInEditor', file?.name);
+			if (loading === false) {
+				// Selected file
+				const file = filesObject.find((element) => element?.selected === true);
+				// Open
+				if (file?.type === 'file') {
+					loading = true;
+					commandExec('openInEditor', file?.name);					
+					return;
+				}
+				loading = true;
+				await commandExec(file?.name === '..' ? 'cdBack' : 'cdForward', file?.name);
+				getCurrentFilesList();
+				loading = false;
 				return;
 			}
-			await commandExec(file?.name === '..' ? 'cdBack' : 'cdForward', file?.name);
-			getCurrentFilesList();
 			return;
 		} else if (key.toString() === '\u0064') {
-			// Selected file
-			const file = filesObject.find((element) => element?.selected === true);
+			if (loading === false) {
+				loading = true;
+				// Selected file
+				const file = filesObject.find((element) => element?.selected === true);
 
-			// Delete command
-			await commandExec(file?.type === 'dir' ? 'deleteDirectory' : 'deleteFile', file?.name);
-			getCurrentFilesList();
+				// Delete command
+				await commandExec(file?.type === 'dir' ? 'deleteDirectory' : 'deleteFile', file?.name);
+				getCurrentFilesList();
+				loading = false;
+				return;
+			}
 			return;
 		} else {
 			// If none of the above just output the key value.
-			console.log('key: ', key);
+			return;
 		}
 	});
 };
