@@ -9,14 +9,14 @@ export const commandExec = (key?: string, filename?: string) => {
 		// Spawning a child process for the text editor.
 		if (key === 'openInEditor') {
 			const child = child_process.spawn(
-				os.platform() === 'win32' ? 'notepad' : 'nano',
+				os.platform() === 'win32' ? 'notepad' : 'gedit',
 				[filename],
 				{
 					stdio: 'inherit',
-				},				
+				},
 			);
 
-			child.on('exit', () => {
+			child.on('close', () => {
 				tableRender();				
 			});
 			return;
@@ -28,7 +28,10 @@ export const commandExec = (key?: string, filename?: string) => {
 			getCurrentFilesList();
 			return;
 		}
-// 'File Not Found' ||
+
+
+		
+
 	// Executing the basic commands with exec()
 	child_process.exec(`${COMMANDS[key]}${filename || ''}`, (error, stdout, stderr) => {
 		if (error) {

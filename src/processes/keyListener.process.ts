@@ -7,7 +7,7 @@ export const inputListenerProcess = () => {
 	//Triggering actions without Enter key
 	if (process.stdin.isTTY) process.stdin.setRawMode(true);
 	// Continues process after key press
-	//process.stdin.resume();
+	process.stdin.resume();
 	process.stdin.setEncoding('utf8');
 
 	process.stdin.on('data', async (key) => {
@@ -69,16 +69,20 @@ export const inputListenerProcess = () => {
 				loading = true;
 				// Selected file
 				const file = filesObject.find((element) => element?.selected === true);
-
-				// Delete command
-				await commandExec(file?.type === 'dir' ? 'deleteDirectory' : 'deleteFile', file?.name);
-				getCurrentFilesList();
+				
+				//Delete command
+				if (file?.name !== '..') {
+					await commandExec(file?.type === 'dir' ? 'deleteDirectory' : 'deleteFile', file?.name);
+					getCurrentFilesList();
+					loading = false;
+					return;
+				}			
+				
 				loading = false;
 				return;
 			}
 			return;
-		} else {
-			// If none of the above just output the key value.
+		} else {			
 			return;
 		}
 	});

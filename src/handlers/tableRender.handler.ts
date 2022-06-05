@@ -19,7 +19,7 @@ export const getCurrentFilesList = async () => {
 	tableRender();
 };
 
-const table = async () => {
+const table = async () => {	
 	console.log('+--------------------------------------------------------------+');
 	console.log('                       #  File names  #                         ');
 	console.log('+--------------------------------------------------------------+');
@@ -66,10 +66,9 @@ const table = async () => {
 };
 
 export const tableRender = () => {
-
 	// Clear the console window before a new table is rendered.
-    console.clear();
-
+	console.clear();	
+	
 	// Display the main app title.
 	figlet.text(
 		'File Manager',
