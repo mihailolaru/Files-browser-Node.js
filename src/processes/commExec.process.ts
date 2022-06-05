@@ -1,7 +1,7 @@
 // Commands execution process
 import os from 'os';
 import child_process from 'child_process';
-import { getCurrentFilesList } from '../handlers/tableRender.handler.js';
+import { tableRender, getCurrentFilesList } from '../handlers/tableRender.handler.js';
 import { filesObject, COMMANDS } from '../resources.js';
 
 export const commandExec = (key?: string, filename?: string) => {
@@ -17,7 +17,7 @@ export const commandExec = (key?: string, filename?: string) => {
 			);
 
 			child.on('exit', () => {
-				getCurrentFilesList();				
+				tableRender();				
 			});
 			return;
 		}
