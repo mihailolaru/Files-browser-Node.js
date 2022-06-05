@@ -3,11 +3,11 @@ import { commandExec } from '../processes/commExec.process.js';
 import { filesObject } from '../resources.js';
 import { tableRender, getCurrentFilesList } from '../handlers/tableRender.handler.js';
 
-export const inputListenerProcess = () => {    
+export const inputListenerProcess = () => {
 	//Triggering actions without Enter key
 	if (process.stdin.isTTY) process.stdin.setRawMode(true);
 	// Continues process after key press
-	process.stdin.resume();
+	//process.stdin.resume();
 	process.stdin.setEncoding('utf8');
 
 	process.stdin.on('data', async (key) => {
@@ -15,23 +15,27 @@ export const inputListenerProcess = () => {
 			// Quit app
 			process.exit();
 			return;
-        } else if (key.toString() === '\u001B\u005B\u0041') {            
+		} else if (key.toString() === '\u001B\u005B\u0041') {
 			// Up arrow key
+			process.stdin.pause();
 			for (let i = 0; i < filesObject.length; i++) {
 				if (filesObject[i]?.selected === true && i > 0) {
 					filesObject[i].selected = false;
 					filesObject[i - 1].selected = true;
-                    tableRender();                      
+					tableRender();
+					process.stdin.resume();
 					return;
 				}
 			}
 		} else if (key.toString() === '\u001B\u005B\u0042') {
 			// Down arrow key.
+			process.stdin.pause();
 			for (let i = 0; i < filesObject.length; i++) {
 				if (filesObject[i]?.selected === true && i < filesObject.length - 1) {
 					filesObject[i].selected = false;
 					filesObject[i + 1].selected = true;
-                    tableRender();                   
+					tableRender();
+					process.stdin.resume();
 					return;
 				}
 			}
@@ -43,8 +47,8 @@ export const inputListenerProcess = () => {
 				await commandExec('openInEditor', file?.name);
 				return;
 			}
-			await commandExec( file?.name === '..' ? 'cdBack' : 'cdForward', file?.name );
-            getCurrentFilesList();          
+			await commandExec(file?.name === '..' ? 'cdBack' : 'cdForward', file?.name);
+			getCurrentFilesList();
 			return;
 		} else if (key.toString() === '\u0064') {
 			// Selected file
@@ -52,7 +56,7 @@ export const inputListenerProcess = () => {
 
 			// Delete command
 			await commandExec(file?.type === 'dir' ? 'deleteDirectory' : 'deleteFile', file?.name);
-            getCurrentFilesList();           
+			getCurrentFilesList();
 			return;
 		} else {
 			// If none of the above just output the key value.

@@ -34,7 +34,8 @@ export const commandExec = (key?: string, filename?: string) => {
 	child_process.exec(`${COMMANDS[key]}${filename || ''}`, (error, stdout, stderr) => {
 		if (error) {
 			if (
-				error.message.includes('ls -p | grep -v /') ||
+				error.message.includes('ls -ap | grep -v /') ||
+				error.message.includes('ls -d */') ||
 				error.message.includes('File Not Found')
 			)
 				resolve('No files found');
