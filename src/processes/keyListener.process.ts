@@ -2,6 +2,7 @@
 import { commandExec } from '../processes/commExec.process.js';
 import { filesObject } from '../resources.js';
 import { tableRender, getCurrentFilesList } from '../handlers/tableRender.handler.js';
+
 import readline from 'readline';
 import trash from 'trash';
 
@@ -86,9 +87,9 @@ export const inputListenerProcess = () => {
 							 //rl.clearScreenDown(process.stdout);
 							if (answer.toLowerCase() === 'y') {
 								await trash(file?.name);
-								rl.close();
 								//commandExec(file?.type === 'dir' ? 'deleteDirectory' : 'deleteFile', file?.name);
-							}							
+							}
+							rl.close();
 						},
 					);
 
