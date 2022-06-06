@@ -2,7 +2,6 @@
 import { commandExec } from '../processes/commExec.process.js';
 import { filesObject } from '../resources.js';
 import { tableRender, getCurrentFilesList } from '../handlers/tableRender.handler.js';
-
 import readline from 'readline';
 import trash from 'trash';
 
@@ -13,9 +12,13 @@ export const inputListenerProcess = () => {
 	process.stdin.resume();
 	process.stdin.setEncoding('utf8');
 
+	const rl = readline.createInterface({
+		input: process.stdin,
+		output: process.stdout,
+	});
+
 	process.stdin.on('data', async (key) => {
 		let loading = false;
-
 		if (key.toString() === '\u0071') {
 			// Quit app
 			console.clear();
@@ -75,21 +78,18 @@ export const inputListenerProcess = () => {
 				const file = filesObject.find((element) => element?.selected === true);
 
 				//Delete command
-				if (file?.name !== '..') {
+				if (file?.name !== '..') {	
 					process.stdin.pause();
-					process.stdin.setRawMode(false);
-
-					const rl = readline.createInterface(process.stdin, process.stdout);
-
+					process.stdin.setRawMode(false);				
 					rl.question(
-						`Confirm deletion of ${file?.name}. Please type 'y' then Enter or any key to abort followed by Enter? > `,
+						`Confirm deletion of ${file?.name}. Please type 'y' then Enter or any key to abort followed by Enter? `,
 						async (answer) => {
-							 //rl.clearScreenDown(process.stdout);
+							//rl.clearScreenDown(process.stdout);
 							if (answer.toLowerCase() === 'y') {
-								await trash(file?.name);
+								await trash(file?.name);								
+								rl.close();
 								//commandExec(file?.type === 'dir' ? 'deleteDirectory' : 'deleteFile', file?.name);
-							}
-							rl.close();
+							}						
 						},
 					);
 
