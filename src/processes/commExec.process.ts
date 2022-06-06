@@ -16,15 +16,16 @@ export const commandExec = (key?: string, filename?: string) => {
 				},
 			);
 
-			child.on('close', () => {
-				tableRender();				
+			child.on('close', () => {				
+				tableRender();					
 			});
 			return;
 		}
 
 		// Changing directory
 		if (key === 'cdBack' || key === 'cdForward') {
-			process.chdir(filename);
+			// Changing the directory
+			process.chdir(filename);		
 			getCurrentFilesList();
 			return;
 		}

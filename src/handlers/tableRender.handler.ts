@@ -9,17 +9,16 @@ import chalk from 'chalk';
 import dedent from 'dedent-js';
 
 export const getCurrentFilesList = async () => {
-  
-	// CLear the files object
-    filesObject.length = 0;
-    
+	// Clear the files object
+	filesObject.length = 0;
+
 	// Adding new data
 	await commandExec('getDirectories');
 	await commandExec('getFiles');
 	tableRender();
 };
 
-const table = async () => {	
+const table = async () => {
 	console.log('+--------------------------------------------------------------+');
 	console.log('                       #  File names  #                         ');
 	console.log('+--------------------------------------------------------------+');
@@ -62,13 +61,12 @@ const table = async () => {
 				'',
 			);
 	}
-	console.log('+--------------------------------------------------------------+');	
+	console.log('+--------------------------------------------------------------+');
 };
 
-export const tableRender = () => {
-	// Clear the console window before a new table is rendered.
-	console.clear();	
-	
+export const tableRender = async () => {
+	console.clear();
+
 	// Display the main app title.
 	figlet.text(
 		'File Manager',
@@ -79,7 +77,7 @@ export const tableRender = () => {
 			whitespaceBreak: true,
 		},
 		function (err, title) {
-			if (err) {				
+			if (err) {
 				console.dir(err);
 				return;
 			}
@@ -96,8 +94,8 @@ export const tableRender = () => {
 					margin: 1,
 					borderStyle: 'double',
 				}),
-            );
-            
+			);
+
 			// The table
 			table();
 		},

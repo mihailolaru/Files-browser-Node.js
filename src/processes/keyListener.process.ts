@@ -3,26 +3,22 @@ import { commandExec } from '../processes/commExec.process.js';
 import { filesObject } from '../resources.js';
 import { tableRender, getCurrentFilesList } from '../handlers/tableRender.handler.js';
 import readline from 'readline';
+import trash from 'trash';
 
 export const inputListenerProcess = () => {
-	//Triggering actions without Enter key
+	// Triggering actions without Enter key
 	if (process.stdin.isTTY) process.stdin.setRawMode(true);
 	// Continues process after key press
 	process.stdin.resume();
 	process.stdin.setEncoding('utf8');
-
-	const rl = readline.createInterface({
-		input: process.stdin,
-		output: process.stdout,
-	});
 
 	process.stdin.on('data', async (key) => {
 		let loading = false;
 
 		if (key.toString() === '\u0071') {
 			// Quit app
+			console.clear();
 			process.exit();
-			return;
 		} else if (key.toString() === '\u001B\u005B\u0041') {
 			// Up arrow key
 			if (loading === false) {
@@ -61,6 +57,7 @@ export const inputListenerProcess = () => {
 				if (file?.type === 'file') {
 					loading = true;
 					commandExec('openInEditor', file?.name);
+					loading = false;
 					return;
 				}
 				loading = true;
@@ -78,18 +75,30 @@ export const inputListenerProcess = () => {
 
 				//Delete command
 				if (file?.name !== '..') {
-					rl.question(`Confirm deletion of ${file?.name} ?`, answer => {
-						if (answer === 'y') {
-							commandExec(file?.type === 'dir' ? 'deleteDirectory' : 'deleteFile', file?.name);
-						}
-						rl.close();
-					});
+					process.stdin.pause();
+					process.stdin.setRawMode(false);
+
+					const rl = readline.createInterface(process.stdin, process.stdout);
+
+					rl.question(
+						`Confirm deletion of ${file?.name}. Please type 'y' then Enter or any key to abort followed by Enter? > `,
+						async (answer) => {
+							 //rl.clearScreenDown(process.stdout);
+							if (answer.toLowerCase() === 'y') {
+								await trash(file?.name);
+								rl.close();
+								//commandExec(file?.type === 'dir' ? 'deleteDirectory' : 'deleteFile', file?.name);
+							}							
+						},
+					);
 
 					rl.on('close', function () {
+						process.stdin.resume();
+						process.stdin.setRawMode(true);
 						getCurrentFilesList();
 						loading = false;
 						return;
-					});			
+					});
 				}
 
 				loading = false;
