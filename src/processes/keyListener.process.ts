@@ -55,8 +55,7 @@ export const inputListenerProcess = () => {
 	process.stdin.on('data', async (key) => {
 		let loading = false;
 		if (key.toString() === '\u0071') {
-			// Quit app
-			//console.clear();
+			// Quit app		
 			console.log('\x1Bc');
 			process.exit();
 		} else if (key.toString() === '\u001B\u005B\u0041') {		
