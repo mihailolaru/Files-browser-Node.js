@@ -5,17 +5,53 @@ import { tableRender, getCurrentFilesList } from '../handlers/tableRender.handle
 import readline from 'readline';
 import trash from 'trash';
 
+const deleteConfirm = (loading: boolean) => {	
+	// Stop the current on data listener
+	process.stdin.removeAllListeners('data');
+
+	loading = true;
+
+	// Get the selected file
+	const file = filesObject.find((element) => element?.selected === true);
+
+	// Prevent the '..' element to be deleted
+	if (file?.name !== '..') {
+		
+		const rl = readline.createInterface({
+			input: process.stdin,
+			output: process.stdout,			
+		});
+
+		rl.question(
+			`To confirm deletion of ${file?.name} type 'y' then Enter or any other key followed by Enter to abort: `,
+			async (answer) => {						
+				if (answer.toLowerCase().trim() === 'y') {
+					await trash(file?.name);
+					rl.close();
+				} else {
+					rl.close();
+				}
+			},
+		);
+		//After closing the readline instance relaunch the on data listener, rerender the table and set loading to false.
+		rl.on('close', function () {
+			inputListenerProcess();			
+			getCurrentFilesList();
+			loading = false;
+			return;
+		});
+	}
+	// If user trying to remove the '..' element, just return.
+	loading = false;
+	return;
+};
+
 export const inputListenerProcess = () => {
 	// Triggering actions without Enter key
 	if (process.stdin.isTTY) process.stdin.setRawMode(true);
 	// Continues process after key press
 	process.stdin.resume();
 	process.stdin.setEncoding('utf8');
-
-	const rl = readline.createInterface({
-		input: process.stdin,
-		output: process.stdout,
-	});
 
 	process.stdin.on('data', async (key) => {
 		let loading = false;
@@ -26,9 +62,9 @@ export const inputListenerProcess = () => {
 		} else if (key.toString() === '\u001B\u005B\u0041') {
 			// Up arrow key
 			if (loading === false) {
+				loading = true;
 				for (let i = 0; i < filesObject.length; i++) {
-					if (filesObject[i]?.selected === true && i > 0) {
-						loading = true;
+					if (filesObject[i]?.selected === true && i > 0) {						
 						filesObject[i].selected = false;
 						filesObject[i - 1].selected = true;
 						tableRender();
@@ -41,9 +77,9 @@ export const inputListenerProcess = () => {
 		} else if (key.toString() === '\u001B\u005B\u0042') {
 			// Down arrow key.
 			if (loading === false) {
+				loading = true;
 				for (let i = 0; i < filesObject.length; i++) {
-					if (filesObject[i]?.selected === true && i < filesObject.length - 1) {
-						loading = true;
+					if (filesObject[i]?.selected === true && i < filesObject.length - 1) {						
 						filesObject[i].selected = false;
 						filesObject[i + 1].selected = true;
 						tableRender();
@@ -55,16 +91,15 @@ export const inputListenerProcess = () => {
 			return;
 		} else if (key.toString() === '\u006F') {
 			if (loading === false) {
+				loading = true;
 				// Selected file
 				const file = filesObject.find((element) => element?.selected === true);
 				// Open
-				if (file?.type === 'file') {
-					loading = true;
+				if (file?.type === 'file') {					
 					commandExec('openInEditor', file?.name);
 					loading = false;
 					return;
-				}
-				loading = true;
+				}				
 				await commandExec(file?.name === '..' ? 'cdBack' : 'cdForward', file?.name);
 				getCurrentFilesList();
 				loading = false;
@@ -73,37 +108,7 @@ export const inputListenerProcess = () => {
 			return;
 		} else if (key.toString() === '\u0064') {
 			if (loading === false) {
-				loading = true;
-				// Selected file
-				const file = filesObject.find((element) => element?.selected === true);
-
-				//Delete command
-				if (file?.name !== '..') {	
-					process.stdin.pause();
-					process.stdin.setRawMode(false);				
-					rl.question(
-						`Confirm deletion of ${file?.name}. Please type 'y' then Enter or any key to abort followed by Enter? `,
-						async (answer) => {
-							//rl.clearScreenDown(process.stdout);
-							if (answer.toLowerCase() === 'y') {
-								await trash(file?.name);								
-								rl.close();
-								//commandExec(file?.type === 'dir' ? 'deleteDirectory' : 'deleteFile', file?.name);
-							}						
-						},
-					);
-
-					rl.on('close', function () {
-						process.stdin.resume();
-						process.stdin.setRawMode(true);
-						getCurrentFilesList();
-						loading = false;
-						return;
-					});
-				}
-
-				loading = false;
-				return;
+				deleteConfirm(loading);
 			}
 			return;
 		} else {
@@ -111,8 +116,3 @@ export const inputListenerProcess = () => {
 		}
 	});
 };
-
-// '\u001B\u005B\u0041' - 'up'
-// '\u001B\u005B\u0043' - 'right'
-// '\u001B\u005B\u0042' - 'down'
-// '\u001B\u005B\u0044' - 'left'

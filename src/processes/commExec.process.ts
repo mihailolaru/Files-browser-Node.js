@@ -33,6 +33,7 @@ export const commandExec = (key?: string, filename?: string) => {
 		// Executing the basic commands with exec()
 		child_process.exec(`${COMMANDS[key]}${filename || ''}`, (error, stdout, stderr) => {
 			if (error) {
+				// The check is done to continue process in case no files or directories are located on the current location.
 				if (
 					error.message.includes('ls -ap | grep -v /') ||
 					error.message.includes('ls -d */') ||

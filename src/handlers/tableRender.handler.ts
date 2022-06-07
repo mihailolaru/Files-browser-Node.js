@@ -19,11 +19,11 @@ export const getCurrentFilesList = async () => {
 };
 
 const table = async () => {
-	console.log('+--------------------------------------------------------------+');
-	console.log('                       #  File names  #                         ');
-	console.log('+--------------------------------------------------------------+');
-	console.log(` Path: ${await commandExec('currentDirPath')}                   `);
-	console.log('+--------------------------------------------------------------+');
+	console.log('+----------------------------------------------------------------------+');
+	console.log('                            #  File names  #                            ');
+	console.log('+----------------------------------------------------------------------+');
+	console.log(` Path: ${await commandExec('currentDirPath')}                           `);
+	console.log('+----------------------------------------------------------------------+');
 
 	// Include the 'back' object (..) if it is not already included.
 	if (filesObject?.[0]?.name !== '..') {
@@ -61,10 +61,11 @@ const table = async () => {
 				'',
 			);
 	}
-	console.log('+--------------------------------------------------------------+');
+	console.log('+----------------------------------------------------------------------+');
 };
 
 export const tableRender = async () => {
+	// Clear the console.
 	console.clear();
 
 	// Display the main app title.
@@ -82,10 +83,10 @@ export const tableRender = async () => {
 				return;
 			}
 
-			// The app title
+			// Display the app title
 			console.log(title);
 
-			// Display the controls list
+			// Display the controls info list
 			console.log(
 				boxen(dedent`Up/Down arrows keys - to navigate \n o - open \n d - delete \n q - quit`, {
 					title: chalk.bgCyan('Available key commands:'),
@@ -96,7 +97,7 @@ export const tableRender = async () => {
 				}),
 			);
 
-			// The table
+			// Display the table
 			table();
 		},
 	);
