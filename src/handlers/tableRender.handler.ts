@@ -18,7 +18,7 @@ export const getCurrentFilesList = async () => {
 	tableRender();
 };
 
-const table = async () => {
+const table = async () => {	
 	console.log('+----------------------------------------------------------------------+');
 	console.log('                            #  File names  #                            ');
 	console.log('+----------------------------------------------------------------------+');
@@ -61,13 +61,13 @@ const table = async () => {
 				'',
 			);
 	}
-	console.log('+----------------------------------------------------------------------+');
+	console.log('+----------------------------------------------------------------------+');	
 };
 
 export const tableRender = async () => {
 	// Clear the console.
-	console.clear();
-
+	console.log('\x1Bc');
+	
 	// Display the main app title.
 	figlet.text(
 		'File Manager',
@@ -77,28 +77,29 @@ export const tableRender = async () => {
 			width: 80,
 			whitespaceBreak: true,
 		},
-		function (err, title) {
+		function (err, title) {			
 			if (err) {
 				console.dir(err);
 				return;
 			}
+			if (title) {
+				// Display the app title
+				console.log(title);
 
-			// Display the app title
-			console.log(title);
+				// Display the controls info list
+				console.log(
+					boxen(dedent`Up/Down arrows keys - to navigate \n o - open \n d - delete \n q - quit`, {
+						title: chalk.bgCyan('Available key commands:'),
+						titleAlignment: 'center',
+						padding: 1,
+						margin: 1,
+						borderStyle: 'double',
+					}),
+				);
 
-			// Display the controls info list
-			console.log(
-				boxen(dedent`Up/Down arrows keys - to navigate \n o - open \n d - delete \n q - quit`, {
-					title: chalk.bgCyan('Available key commands:'),
-					titleAlignment: 'center',
-					padding: 1,
-					margin: 1,
-					borderStyle: 'double',
-				}),
-			);
-
-			// Display the table
-			table();
+				// Display the table
+				table();
+			}	
 		},
 	);
 };

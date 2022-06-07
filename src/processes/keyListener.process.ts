@@ -5,7 +5,7 @@ import { tableRender, getCurrentFilesList } from '../handlers/tableRender.handle
 import readline from 'readline';
 import trash from 'trash';
 
-const deleteConfirm = (loading: boolean) => {	
+const deleteConfirm = (loading: boolean) => {
 	// Stop the current on data listener
 	process.stdin.removeAllListeners('data');
 
@@ -16,15 +16,14 @@ const deleteConfirm = (loading: boolean) => {
 
 	// Prevent the '..' element to be deleted
 	if (file?.name !== '..') {
-		
 		const rl = readline.createInterface({
 			input: process.stdin,
-			output: process.stdout,			
+			output: process.stdout,
 		});
 
 		rl.question(
 			`To confirm deletion of ${file?.name} type 'y' then Enter or any other key followed by Enter to abort: `,
-			async (answer) => {						
+			async (answer) => {
 				if (answer.toLowerCase().trim() === 'y') {
 					await trash(file?.name);
 					rl.close();
@@ -35,7 +34,7 @@ const deleteConfirm = (loading: boolean) => {
 		);
 		//After closing the readline instance relaunch the on data listener, rerender the table and set loading to false.
 		rl.on('close', function () {
-			inputListenerProcess();			
+			inputListenerProcess();
 			getCurrentFilesList();
 			loading = false;
 			return;
@@ -57,14 +56,15 @@ export const inputListenerProcess = () => {
 		let loading = false;
 		if (key.toString() === '\u0071') {
 			// Quit app
-			console.clear();
+			//console.clear();
+			console.log('\x1Bc');
 			process.exit();
-		} else if (key.toString() === '\u001B\u005B\u0041') {
+		} else if (key.toString() === '\u001B\u005B\u0041') {		
 			// Up arrow key
 			if (loading === false) {
 				loading = true;
 				for (let i = 0; i < filesObject.length; i++) {
-					if (filesObject[i]?.selected === true && i > 0) {						
+					if (filesObject[i]?.selected === true && i > 0) {
 						filesObject[i].selected = false;
 						filesObject[i - 1].selected = true;
 						tableRender();
@@ -74,12 +74,12 @@ export const inputListenerProcess = () => {
 				}
 			}
 			return;
-		} else if (key.toString() === '\u001B\u005B\u0042') {
+		} else if (key.toString() === '\u001B\u005B\u0042') {			
 			// Down arrow key.
 			if (loading === false) {
 				loading = true;
 				for (let i = 0; i < filesObject.length; i++) {
-					if (filesObject[i]?.selected === true && i < filesObject.length - 1) {						
+					if (filesObject[i]?.selected === true && i < filesObject.length - 1) {
 						filesObject[i].selected = false;
 						filesObject[i + 1].selected = true;
 						tableRender();
@@ -95,11 +95,11 @@ export const inputListenerProcess = () => {
 				// Selected file
 				const file = filesObject.find((element) => element?.selected === true);
 				// Open
-				if (file?.type === 'file') {					
+				if (file?.type === 'file') {
 					commandExec('openInEditor', file?.name);
 					loading = false;
 					return;
-				}				
+				}
 				await commandExec(file?.name === '..' ? 'cdBack' : 'cdForward', file?.name);
 				getCurrentFilesList();
 				loading = false;
