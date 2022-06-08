@@ -2,6 +2,7 @@
 import { commandExec } from '../processes/commExec.process.js';
 import { filesObject } from '../resources.js';
 import { tableRender, getCurrentFilesList } from '../handlers/tableRender.handler.js';
+import { writeErrLog } from '../handlers/writeLog.handler.js'; 
 import readline from 'readline';
 import trash from 'trash';
 
@@ -12,7 +13,7 @@ const deleteConfirm = (loading: boolean) => {
 	loading = true;
 
 	// Get the selected file
-	const file = filesObject.find((element) => element?.selected === true);
+	const file = filesObject.find(element => element?.selected === true);
 
 	// Prevent the '..' element to be deleted
 	if (file?.name !== '..') {
@@ -25,7 +26,7 @@ const deleteConfirm = (loading: boolean) => {
 			`To confirm deletion of ${file?.name} type 'y' then Enter or any other key followed by Enter to abort: `,
 			async (answer) => {
 				if (answer.toLowerCase().trim() === 'y') {
-					await trash(file?.name);
+					await trash(file?.name).catch(err => writeErrLog(err));
 					rl.close();
 				} else {
 					rl.close();
@@ -66,11 +67,11 @@ export const inputListenerProcess = () => {
 					if (filesObject[i]?.selected === true && i > 0) {
 						filesObject[i].selected = false;
 						filesObject[i - 1].selected = true;
-						tableRender();
-						loading = false;
+						tableRender();						
 						return;
 					}
 				}
+				loading = false;
 			}
 			return;
 		} else if (key.toString() === '\u001B\u005B\u0042') {			
@@ -81,25 +82,27 @@ export const inputListenerProcess = () => {
 					if (filesObject[i]?.selected === true && i < filesObject.length - 1) {
 						filesObject[i].selected = false;
 						filesObject[i + 1].selected = true;
-						tableRender();
-						loading = false;
+						tableRender();						
 						return;
 					}
 				}
+				loading = false;
 			}
 			return;
 		} else if (key.toString() === '\u006F') {
 			if (loading === false) {
 				loading = true;
 				// Selected file
-				const file = filesObject.find((element) => element?.selected === true);
+				const file = filesObject.find(element => element?.selected === true);
 				// Open
 				if (file?.type === 'file') {
 					commandExec('openInEditor', file?.name);
 					loading = false;
 					return;
 				}
-				await commandExec(file?.name === '..' ? 'cdBack' : 'cdForward', file?.name);
+				await commandExec(file?.name === '..' ? 'cdBack' : 'cdForward', file?.name).catch((err) =>
+					writeErrLog(err),
+				);
 				getCurrentFilesList();
 				loading = false;
 				return;

@@ -50,7 +50,7 @@ export const commandExec = (key?: string, filename?: string) => {
 			if (key === 'getDirectories' || key === 'getFiles') {
 				const fileNames = stdout
 					.split(os.platform() === 'win32' ? '\r\n' : '\n')
-					.filter((item) => item !== '');
+					.filter(item => item !== '');
 
 				if (fileNames.length > 0) {
 					for (let i = 0; i < fileNames.length; i++) {

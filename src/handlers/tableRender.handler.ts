@@ -2,6 +2,7 @@
 import figlet from 'figlet';
 import { filesObject } from '../resources.js';
 import { commandExec } from '../processes/commExec.process.js';
+import { writeErrLog } from '../handlers/writeLog.handler.js';
 
 // Style the console log
 import boxen from 'boxen';
@@ -13,16 +14,20 @@ export const getCurrentFilesList = async () => {
 	filesObject.length = 0;
 
 	// Adding new data
-	await commandExec('getDirectories');
-	await commandExec('getFiles');
+	await commandExec('getDirectories').catch((err) => writeErrLog(err));
+	await commandExec('getFiles').catch((err) => writeErrLog(err));
 	tableRender();
 };
 
-const table = async () => {	
+const table = async () => {
 	console.log('+----------------------------------------------------------------------+');
 	console.log('                            #  File names  #                            ');
 	console.log('+----------------------------------------------------------------------+');
-	console.log(` Path: ${await commandExec('currentDirPath')}                           `);
+	console.log(
+		` Path: ${await commandExec('currentDirPath').catch((err) =>
+			writeErrLog(err),
+		)}                           `,
+	);
 	console.log('+----------------------------------------------------------------------+');
 
 	// Include the 'back' object (..) if it is not already included.
@@ -61,13 +66,13 @@ const table = async () => {
 				'',
 			);
 	}
-	console.log('+----------------------------------------------------------------------+');	
+	console.log('+----------------------------------------------------------------------+');
 };
 
 export const tableRender = async () => {
 	// Clear the console.
-	console.log('\x1Bc');
-	
+	//console.log('\x1Bc');
+
 	// Display the main app title.
 	figlet.text(
 		'File Manager',
@@ -77,7 +82,7 @@ export const tableRender = async () => {
 			width: 80,
 			whitespaceBreak: true,
 		},
-		function (err, title) {			
+		function (err, title) {
 			if (err) {
 				console.dir(err);
 				return;
@@ -99,7 +104,7 @@ export const tableRender = async () => {
 
 				// Display the table
 				table();
-			}	
+			}
 		},
 	);
 };
