@@ -71,7 +71,7 @@ const table = async () => {
 
 export const tableRender = async () => {
 	// Clear the console.
-	//console.log('\x1Bc');
+	console.log('\x1Bc');
 
 	// Display the main app title.
 	figlet.text(
