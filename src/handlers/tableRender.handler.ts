@@ -3,6 +3,7 @@ import figlet from 'figlet';
 import { filesObject } from '../resources.js';
 import { commandExec } from '../processes/commExec.process.js';
 import { writeErrLog } from '../handlers/writeLog.handler.js';
+import os from 'os';
 
 // Style the console log
 import boxen from 'boxen';
